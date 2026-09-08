@@ -1,0 +1,955 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Escuta Sagrada</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Libre+Franklin:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --bg-a: #FCEFEE;
+    --bg-b: #FDF7ED;
+    --paper: #FFFDFB;
+    --ink: #3E1420;
+    --ink-soft: #8C5B67;
+    --ink-faint: #D9BCC0;
+    --line: #F1DEDD;
+    --rose: #C98A93;
+    --gold: #C9A44C;
+    --gold-pale: #EAD9AE;
+    --wine: #7A2340;
+    --tag-bg: #F7EADA;
+    --shadow: 0 1px 2px rgba(122,35,64,.08), 0 18px 38px -20px rgba(122,35,64,.30);
+    --ring-track: #F0DCDD;
+    --gradient-accent: linear-gradient(135deg, var(--rose), var(--gold));
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg-a: #23121B; --bg-b: #190F14; --paper: #2C1721; --ink: #F7E8E4;
+      --ink-soft: #DAAAB3; --ink-faint: #7C4E58; --line: #402530;
+      --rose: #E7ACB4; --gold: #E7C578; --gold-pale: #6B5333; --wine: #F2AFC2;
+      --tag-bg: #3B2A1D; --shadow: 0 1px 2px rgba(0,0,0,.35), 0 20px 40px -20px rgba(0,0,0,.7);
+      --ring-track: #3B232B;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg-a: #23121B; --bg-b: #190F14; --paper: #2C1721; --ink: #F7E8E4;
+    --ink-soft: #DAAAB3; --ink-faint: #7C4E58; --line: #402530;
+    --rose: #E7ACB4; --gold: #E7C578; --gold-pale: #6B5333; --wine: #F2AFC2;
+    --tag-bg: #3B2A1D; --shadow: 0 1px 2px rgba(0,0,0,.35), 0 20px 40px -20px rgba(0,0,0,.7);
+    --ring-track: #3B232B;
+  }
+  *{ box-sizing: border-box; }
+  body{
+    margin:0;
+    background: var(--bg-a);
+    background: linear-gradient(180deg, var(--bg-a) 0%, var(--bg-b) 480px);
+    color: var(--ink);
+    font-family: 'Libre Franklin', ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection{ background: var(--gold-pale); }
+  .wrap{ max-width: 780px; margin: 0 auto; padding: 48px 20px 130px; }
+  header.top{ display:flex; flex-direction:column; gap:20px; margin-bottom:38px; }
+  .eyebrow{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .eyebrow-label{ font-family:'Cormorant Garamond', 'Fraunces', serif; font-style: italic; font-size:17px; color: var(--ink-soft); }
+  .badge-private{
+    font-family:'Libre Franklin', sans-serif; font-size:10px; font-weight:600; letter-spacing:.12em; text-transform:uppercase;
+    color: var(--gold); border:1px solid var(--gold-pale); border-radius:100px; padding:5px 12px; background: var(--paper); white-space:nowrap;
+  }
+  .eyebrow-actions{ display:flex; align-items:center; gap:8px; }
+  .theme-btn{
+    width:30px; height:30px; border-radius:50%; border:1px solid var(--gold-pale); background: var(--paper);
+    color: var(--gold); cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0;
+  }
+  .theme-btn:hover{ border-color: var(--gold); }
+  .theme-btn svg{ width:15px; height:15px; }
+  .course-cover{
+    width:100%; aspect-ratio: 16/9; object-fit:contain; border-radius:16px; margin-bottom:14px; box-shadow: var(--shadow); background: var(--line);
+  }
+  h1{ font-family:'Fraunces', ui-serif, serif; font-optical-sizing: auto; font-weight:600; font-size: clamp(38px, 7vw, 52px); line-height:1.03; letter-spacing:-.01em; margin:0; text-wrap: balance; }
+  h1 .shine{
+    font-style: italic; font-weight:500;
+    background: linear-gradient(100deg, var(--wine) 0%, var(--rose) 35%, var(--gold) 65%, var(--rose) 100%);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .sub{ font-size:16px; line-height:1.6; color: var(--ink-soft); max-width: 55ch; margin:0; }
+  .ornament{ display:flex; align-items:center; gap:12px; margin:2px 0 4px; }
+  .ornament i{ flex:1; height:1px; background: linear-gradient(90deg, transparent, var(--gold-pale), transparent); }
+  .ornament b{ width:5px; height:5px; border-radius:50%; background: var(--gold); flex:0 0 auto; }
+  .progress-card{
+    display:flex; align-items:center; gap:22px; background: var(--paper); border:1px solid var(--line);
+    border-radius:20px; padding:20px 24px; box-shadow: var(--shadow); position:relative;
+  }
+  .aura{ position:relative; width:76px; height:76px; flex: 0 0 auto; border-radius:50%; display:flex; align-items:center; justify-content:center; filter: drop-shadow(0 0 10px rgba(201,138,147,.35)); }
+  .aura::before{
+    content:""; position:absolute; inset:0; border-radius:50%;
+    background: conic-gradient(from -90deg, var(--rose) calc(var(--pct) * 1%), var(--ring-track) 0);
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 9px), #000 calc(100% - 8px));
+            mask: radial-gradient(farthest-side, transparent calc(100% - 9px), #000 calc(100% - 8px));
+  }
+  .aura-num{ font-family:'Cormorant Garamond', serif; font-style: italic; font-size:19px; font-weight:600; font-variant-numeric: tabular-nums; color: var(--wine); }
+  .progress-text{ display:flex; flex-direction:column; gap:5px; flex:1; min-width:0; }
+  .progress-title{ font-family:'Fraunces', serif; font-weight:600; font-size:16px; }
+  .progress-detail{ font-family:'Cormorant Garamond', serif; font-size:16px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .jump-btn{
+    font-family:'Libre Franklin', sans-serif; font-size:12.5px; font-weight:600; color: var(--paper);
+    background: var(--gradient-accent); border: none; border-radius:100px; padding:10px 18px; cursor:pointer;
+    white-space:nowrap; box-shadow: 0 6px 16px -6px rgba(201,138,147,.55);
+  }
+  .jump-btn:hover{ filter: brightness(1.05); }
+  .jump-btn:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, summary:focus-visible, select:focus-visible{ outline: 2px solid var(--gold); outline-offset: 2px; }
+  .course-nav{
+    display:flex; flex-wrap:wrap; gap:8px; margin: 22px 0 0;
+  }
+  .course-nav a{
+    display:inline-flex; align-items:baseline; gap:6px; text-decoration:none;
+    background: var(--paper); border:1px solid var(--line); border-radius:100px;
+    padding:8px 14px; font-family:'Libre Franklin', sans-serif; font-size:12.5px; font-weight:600; color: var(--ink);
+  }
+  .course-nav a:hover{ border-color: var(--gold); }
+  .course-nav a span{
+    font-family:'Cormorant Garamond', serif; font-style: italic; font-weight:400; font-size:12px; color: var(--ink-faint);
+  }
+  .controls{ display:flex; gap:10px; margin: 22px 0 24px; flex-wrap: wrap; }
+  .search{
+    flex:1; min-width:180px; background: var(--paper); border:1px solid var(--line); border-radius:100px;
+    padding:11px 16px; font-family:'Libre Franklin', sans-serif; font-size:14px; color: var(--ink);
+  }
+  .search::placeholder{ color: var(--ink-faint); }
+  .filter-pill{
+    font-family:'Libre Franklin', sans-serif; font-size:13px; font-weight:500; padding:9px 15px; border-radius:100px;
+    border:1px solid var(--line); background: var(--paper); color: var(--ink-soft); cursor:pointer;
+  }
+  .filter-pill[aria-pressed="true"]{ background: var(--gradient-accent); color: #fff; border-color: transparent; }
+  .course{ margin-bottom:44px; }
+  .course-title{
+    font-family:'Fraunces', ui-serif, serif; font-weight:700; font-size:27px; margin: 0 0 3px; color: var(--wine);
+  }
+  .course-note{ font-size:13.5px; color: var(--ink-soft); margin: 0 0 18px; }
+  .section{ margin-bottom:30px; }
+  .section-title{ font-family:'Fraunces', ui-serif, serif; font-weight:600; font-size:19px; margin: 0 0 12px; color: var(--ink); opacity:.85; }
+  details.module{ background: var(--paper); border:1px solid var(--line); border-radius:16px; margin-bottom:10px; box-shadow: var(--shadow); overflow:hidden; }
+  summary.module-head{ list-style:none; display:flex; align-items:center; gap:12px; padding:15px 18px; cursor:pointer; user-select:none; }
+  summary.module-head::-webkit-details-marker{ display:none; }
+  .chevron{ flex:0 0 auto; width:18px; height:18px; color: var(--gold); transition: transform .15s ease; }
+  details[open] > summary .chevron{ transform: rotate(90deg); }
+  .module-title{ flex:1; min-width:0; font-family:'Fraunces', serif; font-weight:600; font-size:15px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .module-count{ font-family:'Cormorant Garamond', serif; font-size:15px; font-style: italic; color: var(--ink-faint); font-variant-numeric: tabular-nums; flex: 0 0 auto; }
+  .module-done .module-count{ color: var(--gold); font-weight:600; }
+  .lesson-list{ border-top:1px solid var(--line); }
+  .lesson{ border-bottom:1px solid var(--line); }
+  .lesson:last-child{ border-bottom:none; }
+  .lesson-row{ display:flex; align-items:flex-start; gap:13px; padding:14px 18px; }
+  .check{
+    flex:0 0 auto; width:21px; height:21px; margin-top:1px; border-radius:50%; border:1.5px solid var(--ink-faint);
+    background: transparent; cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0;
+  }
+  .check svg{ width:12px; height:12px; opacity:0; color: #fff; }
+  .check[aria-checked="true"]{ background: var(--gradient-accent); border-color: transparent; box-shadow: 0 3px 10px -3px rgba(201,138,147,.6); }
+  .check[aria-checked="true"] svg{ opacity:1; }
+  .lesson-main{ flex:1; min-width:0; }
+  .lesson-title-row{ display:flex; align-items:center; gap:8px; cursor:pointer; }
+  .lesson-title{ font-size:14.5px; line-height:1.4; }
+  .lesson[data-done="true"] .lesson-title{ color: var(--ink-soft); }
+  .note-dot{ width:5px; height:5px; border-radius:50%; background: var(--wine); flex:0 0 auto; }
+  .lesson-meta{ font-family:'Cormorant Garamond', serif; font-style: italic; font-size:13px; color: var(--ink-faint); margin-top:3px; }
+  .file-tag{ display:inline-flex; align-items:baseline; gap:6px; margin-top:6px; font-size:11.5px; color: var(--wine); background: var(--tag-bg); border-radius:100px; padding:4px 11px 4px 4px; }
+  .file-tag-label{ font-family:'Libre Franklin', sans-serif; font-size:9.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color: var(--paper); background: var(--gradient-accent); border-radius:100px; padding:3px 8px; }
+  .file-tag-name{ font-family:'Libre Franklin', sans-serif; font-weight:500; }
+  .file-tag-date{ font-family:'Cormorant Garamond', serif; font-style: italic; color: var(--ink-soft); }
+  .video-wrap{ margin-top:10px; border-radius:12px; overflow:hidden; background:#150a10; box-shadow: var(--shadow); }
+  .video-wrap video{ display:block; width:100%; aspect-ratio: 16/9; background:#150a10; }
+  .notes{ display:none; padding: 4px 18px 18px 52px; flex-direction:column; gap:10px; }
+  .lesson[data-expanded="true"] .notes{ display:flex; }
+  label.field-label{ font-family:'Libre Franklin', sans-serif; font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color: var(--gold); display:block; margin-bottom:6px; }
+  textarea{
+    width:100%; resize:vertical; min-height:54px; background: var(--bg-a); border:1px solid var(--line); border-radius:12px;
+    padding:10px 12px; font-family:'Libre Franklin', sans-serif; font-size:13.5px; color: var(--ink); line-height:1.55;
+  }
+  textarea::placeholder{ color: var(--ink-faint); font-style: italic; }
+  .save-hint{ font-family:'Cormorant Garamond', serif; font-style: italic; font-size:12.5px; color: var(--ink-faint); }
+  .empty-state{ text-align:center; padding: 50px 20px; color: var(--ink-soft); font-family:'Cormorant Garamond', serif; font-style: italic; font-size:17px; }
+  footer.note{ margin-top: 44px; padding-top: 22px; border-top:1px solid var(--line); font-size:12.5px; color: var(--ink-faint); line-height:1.7; }
+  @media (prefers-reduced-motion: reduce){ .chevron{ transition:none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">
+      <span class="eyebrow-label">Inês Nunes · todos os cursos</span>
+      <div class="eyebrow-actions">
+        <button class="theme-btn" id="themeBtn" type="button" title="Alternar modo claro/escuro" aria-label="Alternar modo claro/escuro">
+          <svg id="themeIcon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/><path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <span class="badge-private">página privada</span>
+      </div>
+    </div>
+    <h1>Escuta <span class="shine">Sagrada</span></h1>
+    <p class="sub">Vê cada transmissão, ouve cada áudio, por ordem, curso a curso. Marca o que já ouviste, o que sentiste, e o próximo passo antes de avançares.</p>
+    <div class="ornament"><i></i><b></b><i></i></div>
+
+    <div class="progress-card">
+      <div class="aura" style="--pct:0"><div class="aura-num" id="auraNum">0%</div></div>
+      <div class="progress-text">
+        <div class="progress-title">O teu caminho até agora</div>
+        <div class="progress-detail" id="progressDetail">0 de 0 aulas ouvidas</div>
+      </div>
+      <button class="jump-btn" id="jumpBtn" type="button">Continuar daqui →</button>
+    </div>
+
+    <nav class="course-nav" id="courseNav"></nav>
+  </header>
+
+  <div class="controls">
+    <input class="search" id="search" type="search" placeholder="Procurar uma aula...">
+    <button class="filter-pill" data-filter="todas" aria-pressed="true" type="button">Todas</button>
+    <button class="filter-pill" data-filter="por-ouvir" aria-pressed="false" type="button">Por ouvir</button>
+    <button class="filter-pill" data-filter="ouvidas" aria-pressed="false" type="button">Ouvidas</button>
+    <button class="filter-pill" data-filter="com-video" aria-pressed="false" type="button">Com vídeo</button>
+    <button class="filter-pill" data-filter="com-ficheiro" aria-pressed="false" type="button">Ficheiro guardado</button>
+  </div>
+
+  <div id="courses"></div>
+
+  <footer class="note">
+    Guardado automaticamente neste browser, neste ficheiro. Ficheiro pessoal e privado — os vídeos vêm diretamente do alojamento da Inês Nunes (Wistia), nada é copiado para aqui. Cursos a acrescentar em breve: os restantes 7.
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  function W(hash){ return 'https://embed-ssl.wistia.com/deliveries/' + hash + '.bin'; }
+
+  function sunIcon(){ return '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/><path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'; }
+  function moonIcon(){ return '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 14.5A8.5 8.5 0 019.5 4 8.5 8.5 0 1020 14.5z" fill="currentColor"/></svg>'; }
+
+  function applyTheme(mode){
+    if(mode === 'light' || mode === 'dark'){
+      document.documentElement.setAttribute('data-theme', mode);
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
+    var isDark = mode === 'dark' || (mode !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    document.getElementById('themeIcon').outerHTML = (isDark ? moonIcon() : sunIcon()).replace('<svg', '<svg id="themeIcon"');
+  }
+  function initTheme(){
+    var saved = null;
+    try{ saved = localStorage.getItem('escuta-sagrada-theme'); }catch(e){}
+    applyTheme(saved);
+  }
+  function toggleTheme(){
+    var current = document.documentElement.getAttribute('data-theme');
+    var isDarkNow = current === 'dark' || (!current && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    var next = isDarkNow ? 'light' : 'dark';
+    try{ localStorage.setItem('escuta-sagrada-theme', next); }catch(e){}
+    applyTheme(next);
+  }
+
+  var COURSES = [
+    { key:'rf', name:'Riqueza Feminina', note:'Aura Abundante + Sacred Sales.', downloadDate:'2026-09-07T22:11:00', publishDate:'2022-09-14', cover:'https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/site/2147572331/products/xTr0nqpETCqE6jSdpKmK_16.png', sections:[
+      { label:'Aura Abundante', modules:[
+        { label:'Módulo 1 — Co-criação de riqueza feminina', lessons:[
+          { t:'Transmissão divina', video:'fb20f099d98359c39b531cc159a4e7d4bd0bcdbe' },
+          { t:'Download áudio', file:'Modulo1.mp3', date:'2026-09-07T22:13:00' },
+          { t:'Meditação Co-Criação de Riqueza Feminina', file:'Meditacao_AA_sessao1.mp3', date:'2026-09-07T22:12:00' },
+          { t:'Método de manifestação com journaling', file:'AA_-_M_todo_de_Manifesta_o_com_Journaling.pdf', date:'2026-09-07T22:12:00' }
+        ]},
+        { label:'Módulo 2 — Uma nova história com o dinheiro', lessons:[
+          { t:'Transmissão divina', video:'ca2dcb17d105668c94a1154d19828d276ddbe2eb' },
+          { t:'Download áudio', file:'Sessao_2_audio.mp3', date:'2026-09-07T22:13:00' },
+          { t:'Método CC — Curar & Codificar', file:'MetodoCC_audio.mp3', date:'2026-09-07T22:13:00' },
+          { t:'A tua história com o dinheiro — Journaling', file:'AA_-_A_tua_hist_ria_com_o_dinheiro_Journaling.pdf', date:'2026-09-07T22:13:00' },
+          { t:'Mantras de codificação de riqueza', file:'AA_-_Mantras_de_codifica_o_de_riqueza.pdf', date:'2026-09-07T22:13:00' }
+        ]},
+        { label:'Módulo 3 — Abertura ao desejo', lessons:[
+          { t:'Transmissão divina', video:'71929585b6cfdea18baf1b3f4a86f1a516092d08' },
+          { t:'Download áudio', file:'Sessao_3_audio.mp3', date:'2026-09-07T22:13:00' },
+          { t:'Prática de conexão ao desejo', file:'Pratica_de_conexao_ao_desejo.mp3', date:'2026-09-07T22:13:00' },
+          { t:'Prática de libertação da vergonha', file:'Pratica_de_libertacao_da_vergonha.mp3', date:'2026-09-07T22:14:00' }
+        ]},
+        { label:'Módulo 4 — Abertura ao merecimento', lessons:[
+          { t:'Transmissão divina', video:'a8d952023c9941cb5c22c0f9f2a813ab64c543dd' },
+          { t:'Download áudio', file:'Sessao_4_audio.mp3', date:'2026-09-07T22:14:00' },
+          { t:'Meditação de abertura ao merecimento', file:'Meditacao_de_abertura_ao_merecimento.mp3', date:'2026-09-07T22:16:00' },
+          { t:'Os oito Portais do Merecimento', file:'AA_-_8_Portais_M4.pdf', date:'2026-09-07T22:16:00' }
+        ]},
+        { label:'Módulo 5 — Magnetismo e abertura a receber', lessons:[
+          { t:'Transmissão divina', video:'ab4fd4425df58270b288002094d3ec03f743525a' },
+          { t:'Download áudio', file:'Sessao_5_audio.mp3', date:'2026-09-07T22:16:00' },
+          { t:'Os dez passos da Arte de Receber', file:'AA_-_10_Passos_da_Arte_de_Receber.pdf', date:'2026-09-07T22:16:00' },
+          { t:'Hot Date com o Dinheiro', file:'AA_-_Hot_Date_com_o_Dinheiro.pdf', date:'2026-09-07T22:16:00' },
+          { t:'Meditação de abertura a receber', file:'Meditacao_5.mp3', date:'2026-09-07T22:17:00' }
+        ]},
+        { label:'Módulo 6 — Riqueza quântica e colapsar o tempo', lessons:[
+          { t:'Transmissão divina', video:'6605b3e9099f87a64f4b3d7e279a4c3eecd7accc' },
+          { t:'Download áudio', file:'Sessao_6_audio.m4a', date:'2026-09-07T22:17:00' },
+          { t:'Meditação Quântica', file:'Meditacao_quantica.m4a', date:'2026-09-07T22:17:00' },
+          { t:'Viver o Salto Quântico e Colapsar o Tempo & Como criar o Salto Quântico', file:'Como_viver_o_salto_qu_ntico_e_colapsar_o_tempo.pdf', date:'2026-09-07T22:17:00' }
+        ]},
+        { label:'Módulo 7 — Aura milionária', lessons:[
+          { t:'Transmissão divina', video:'e5b5c9dd91affa4b58d3e4bb6847582f08576577' },
+          { t:'Download áudio', file:'Sessao_7_audio.mp3', date:'2026-09-07T22:18:00' },
+          { t:'Meditação de ativação da aura milionária', file:'Meditacao_7.m4a', date:'2026-09-07T22:18:00' }
+        ]},
+        { label:'Q&A e Integração da expansão', lessons:[
+          { t:'Transmissão divina', video:'88e6137a463bf9287969b273d8eb62e05275c85e' },
+          { t:'Download áudio', file:'Sessao_Q_A_audio.mp3', date:'2026-09-07T22:18:00' }
+        ]}
+      ]},
+      { label:'Sacred Sales', modules:[
+        { label:'Módulo 1 — Negócio icónico e a arte das vendas', lessons:[ { t:'Transmissão divina', video:'24af3929a7541f685f94a852e8db9d4fb7c9e9db' }, { t:'Download áudio' } ]},
+        { label:'Módulo 2 — Alinhamento da oferta & Product suite', lessons:[ { t:'Transmissão divina', video:'fcdeb466f7a85284b23c5b7b91350c40ea01559c' }, { t:'Download áudio' }, { t:'Como articulares o teu produto/serviço para o mundo' }, { t:'Estratégias de Product Suite' } ]},
+        { label:'Módulo 3 — Clientes alma gémea que voltam a investir em ti', lessons:[ { t:'Transmissão divina', video:'cf62bc330981b7adce3a7ca130066103655063fe' }, { t:'Download áudio' }, { t:'Perguntas de conexão com clientes alma gémea' } ]},
+        { label:'Módulo 4 — Vender é um processo íntimo', lessons:[ { t:'Transmissão divina', video:'b1a477250baacab9e0ee59b671946ffaefd3e494' }, { t:'Download áudio' }, { t:'Dissolver objeções pedindo consentimento' }, { t:'Sales calls' } ]},
+        { label:'Módulo 5 — Vender e servir nos vários níveis', lessons:[ { t:'Transmissão divina', video:'2c6015456546ae8b788a552bffe666c9e9249760' }, { t:'Download áudio' }, { t:'Método de vendas/lançamento para cada nível' }, { t:'Método de alinhamento de pricing' } ]},
+        { label:'Módulo 6 — Vender no feminino: leveza, prazer, magnetismo', lessons:[ { t:'Transmissão divina', video:'e8c43b9996e9e3160f2543ea9804a6a7ee185a39' }, { t:'Download áudio' }, { t:'Lançamentos femininos — A energia das vendas' }, { t:'Journaling de Manifestação para vendas no feminino' } ]},
+        { label:'Módulo 7 — Faturação multiplicada e expansão de riqueza', lessons:[ { t:'Transmissão divina', video:'b5b61855538b98caa50f137cd8f32fad2a9e71cf' }, { t:'Download áudio' } ]},
+        { label:'Q&A e Integração da expansão', lessons:[ { t:'Transmissão divina', video:'d7cc4a0614452dab57646aabe4682c81e4e534d8' }, { t:'Download áudio' } ]}
+      ]}
+    ]},
+    { key:'lfd', name:'Líderes Femininas Divinas', note:'14 módulos + masterclasses + Q&A + sessões com convidadas.', downloadDate:'2026-09-07T22:20:00', publishDate:'2023-02-28', cover:'https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/file-uploads/site/2147572331/products/17feded-7a00-256-feb1-3c644bc8011f_Capas_produtos.png', sections:[
+      { label:'Módulos', modules:[
+        { label:'Módulo 1 — A tua alma é a estratégia', lessons:[
+          { t:'Transmissão divina', video:'82cea0ef225a1f0278314d562d6a0fb57ad9adf2' },
+          { t:'Download áudio', file:"LFD_-_udio_M_dulo_1.m4a", date:'2026-09-07T22:20:00' },
+          { t:'Download documento módulo', file:"LFD_-_M_dulo_1_-_A_tua_alma_a_tua_estrat_gia.pdf", date:'2026-09-07T22:20:00' }
+        ]},
+        { label:'Módulo 2 — A tua voz é o teu super poder', lessons:[
+          { t:'Transmissão divina', video:'91a0d2461063d996accfd7e1fb2b9294932a7988' },
+          { t:'Download áudio', file:"Audio_M2_-_A_tua_voz_o_teu_super_poder.m4a", date:'2026-09-07T22:20:00' },
+          { t:'Download documento módulo', file:"LFD_-_M2_A_tua_voz_o_teu_super_poder.pdf", date:'2026-09-07T22:20:00' },
+          { t:'Ritual de desbloqueio do chakra da garganta — Vídeo', video:'ac8d78b58b5b23e2b580958f74883f382fb8d26c' },
+          { t:'Ritual de desbloqueio do chakra da garganta — Download áudio', file:"LFD_M2_ritual_audio.mp3", date:'2026-09-07T22:21:00' },
+          { t:'Ritual de desbloqueio do chakra da garganta — Suporte escrito', file:"LFD_-_Ritual_de_desbloqueio_do_chakra_da_garganta.pdf", date:'2026-09-07T22:21:00' }
+        ]},
+        { label:'Módulo 3 — Os canais da tua mensagem', lessons:[
+          { t:'Transmissão divina', video:'30aaba2a798957586f62a5d2d5608aae7da38780' },
+          { t:'Download áudio', file:"Audio_M3_-_Os_canais_da_tua_mensagem.m4a", date:'2026-09-07T22:21:00' },
+          { t:'Download documento módulo', file:"LFD_-_M3_Os_canais_da_tua_mensagem.pdf", date:'2026-09-07T22:21:00' }
+        ]},
+        { label:'Módulo 4 — Magnetiza os teus clientes alma gémea', lessons:[
+          { t:'Transmissão divina', video:'829c9c4b0a47ec1ff2c31c42df1e69b073eb9f4d' },
+          { t:'Download áudio', file:"LFD_audio_M4.m4a", date:'2026-09-07T22:22:00' },
+          { t:'Download documento módulo', file:"LFD_M4_Magnetiza_os_teus_clientes_alma_g_mea.pdf", date:'2026-09-07T22:22:00' },
+          { t:'Ritual de conexão com os teus clientes alma gémea — Suporte escrito', file:"Ritual_de_conex_o_com_os_teus_clientes_alma_g_mea.pdf", date:'2026-09-07T22:22:00' }
+        ]},
+        { label:'Módulo 5 — Cria conteúdo único e redes sociais mágicas', lessons:[
+          { t:'Transmissão divina', video:'8a6cdbc7068bea10299a700b80960058641aaad3' },
+          { t:'Download áudio', file:"audio1608664952.m4a", date:'2026-09-07T22:22:00' },
+          { t:'Download documento módulo', file:"M5_Cria_conteudo_unico_e_torna_as_tuas_redes_sociais_magicas.pdf", date:'2026-09-07T22:22:00' }
+        ]},
+        { label:'Módulo 6 — Stories magnéticos', lessons:[
+          { t:'Transmissão divina', video:'c1cf30cb076e5d6c2e0ccc609b2213e558ed2d3e' },
+          { t:'Download áudio', file:"LFD_audio_M6.m4a", date:'2026-09-07T22:22:00' },
+          { t:'Download documento módulo', file:"M6_Stories_magn_ticos_a_arte_de_magnetizar_clientes_atrav_s_dos_stories_do_Instagram.pdf", date:'2026-09-07T22:22:00' }
+        ]},
+        { label:'Módulo 7 — Produtos e serviços como extensão da tua alma', lessons:[
+          { t:'Transmissão divina', video:'b233ce112013bd185c3601bba5c9b8108a6db4da' },
+          { t:'Download áudio', file:"LFD_M7_audio.m4a", date:'2026-09-07T22:23:00' },
+          { t:'Download documento módulo', file:"M7_Produtos_e_servicos_como_extensao_da_tua_alma.pdf", date:'2026-09-07T22:23:00' }
+        ]},
+        { label:'Módulo 8 — Storytelling', lessons:[
+          { t:'Transmissão divina', video:'0ae24814487b6d308984cbf79be3ec8c9a87ab20' },
+          { t:'Download áudio', file:"LFD_M8_Audio.m4a", date:'2026-09-07T22:23:00' },
+          { t:'Download documento módulo', file:"M8_Storytelling_a_arte_de_contar_hist_rias_para_passar_uma_mensagem_e_vender.pdf", date:'2026-09-07T22:23:00' }
+        ]},
+        { label:'Módulo 9 — O dinheiro é uma energia divina', lessons:[
+          { t:'Transmissão divina', video:'e8b7528f5e5859c7aae7b97936e1d55b05b8722d' },
+          { t:'Download áudio', file:"LFD_M9_Audio.m4a", date:'2026-09-07T22:23:00' },
+          { t:'Download documento módulo', file:"M9_O_dinheiro_e_uma_energia_divina.pdf", date:'2026-09-07T22:23:00' }
+        ]},
+        { label:'Módulo 10 — Apaixona-te por vendas', lessons:[
+          { t:'Transmissão divina', video:'3a56b47206d1e889146853398a2358da94954cf0' },
+          { t:'Download áudio', file:"audio1554736058.m4a", date:'2026-09-07T22:23:00' },
+          { t:'Download documento módulo', file:"M10_Apaixona-te_por_vendas_.pdf", date:'2026-09-07T22:23:00' }
+        ]},
+        { label:'Módulo 11 — Lança a tua magia para o mundo', lessons:[
+          { t:'Transmissão divina', video:'1a6ab4d3cf7d1f6ebfd8ab0994d8f1aa2b7215c1' },
+          { t:'Download áudio', file:"audio1899945969.m4a", date:'2026-09-07T22:23:00' },
+          { t:'Download documento módulo', file:"M11_Lanca_a_tua_magia_para_o_mundo.pdf", date:'2026-09-07T22:24:00' }
+        ]},
+        { label:'Módulo 12 — Manifestar e liderar uma equipa de sonho', lessons:[
+          { t:'Transmissão divina', video:'23a97dcc3d044cab368951a2df9948b35c76b4db' },
+          { t:'Download áudio', file:"LFD_M12_audio.m4a", date:'2026-09-07T22:24:00' },
+          { t:'Download documento módulo', file:"M12_Manifestar_e_liderar_uma_equipa_de_sonho.pdf", date:'2026-09-07T22:24:00' }
+        ]},
+        { label:'Módulo 13 — A arte da liderança feminina divina', lessons:[
+          { t:'Transmissão divina', video:'4903e4f3e37852de9ac933d8ba302ba18fe5b431' },
+          { t:'Download áudio', file:"LFD_M13_audio.m4a", date:'2026-09-07T22:24:00' },
+          { t:'Download documento módulo', file:"M13_A_arte_da_lideran_a_feminina.pdf", date:'2026-09-07T22:24:00' }
+        ]},
+        { label:'Módulo 14 — Morrer e renascer como empreendedora', lessons:[
+          { t:'Transmissão divina', video:'0bcdbc17546b9e0f1740ed8b5ccc80a40bb67b67' },
+          { t:'Download áudio', file:"LFD_audio_M14.m4a", date:'2026-09-07T22:24:00' },
+          { t:'Download documento módulo', file:"M14_Transmiss_o_surpresa_-_Morrer_e_renascer_como_empreendedora_Seres_vista_em_cada_nova_fase.pdf", date:'2026-09-07T22:24:00' }
+        ]}
+      ]},
+      { label:'Masterclasses especiais extra', modules:[
+        { label:'Canaliza mensagens do divino', lessons:[
+          { t:'Transmissão divina', video:'36530ba4dc284ff190a9bdc63b3263f98936ab31' },
+          { t:'Download áudio', file:"LFD_ME1_audio.mp3", date:'2026-09-07T22:25:00' },
+          { t:'Download documento masterclass', file:"LFD_-_Masterclass_Canaliza_mensagens_do_Divino.pdf", date:'2026-09-07T22:25:00' }
+        ]},
+        { label:'Prática Alquimia da Sombra', lessons:[
+          { t:'Vídeo', video:'5d885bcbe564b4a8b6a2da576b88eb5da6e69e02' },
+          { t:'Journaling', file:"LFD_-_Pr_tica_Alquimia_da_Sombra_Journaling.pdf", date:'2026-09-07T22:25:00' },
+          { t:'Download áudio', file:"Alquimia_da_sombra_audio.mp3", date:'2026-09-07T22:26:00' }
+        ]},
+        { label:'Curar a ferida da irmã', lessons:[
+          { t:'Transmissão divina', video:'b8fc59bd1391c76dd0746638e9b44f604a3c229b' },
+          { t:'Download áudio', file:"Masterclass_Curar_a_ferida_da_irma.m4a", date:'2026-09-07T22:26:00' },
+          { t:'Download documento masterclass', file:"Documento_Masterclass_Curar_a_ferida_da_irma.pdf", date:'2026-09-07T22:26:00' },
+          { t:'Meditação de cura da ferida da irmã', file:"Medita_o_cura.mp3", date:'2026-09-07T22:26:00' }
+        ]},
+        { label:'CEO feminina de dia & mulher à noite', lessons:[
+          { t:'Transmissão divina', video:'bcf4d1c06a847304ee54cc02248096721ef8f44e' },
+          { t:'Download áudio', file:"Masterclass_CEO_Mulher_audio.m4a", date:'2026-09-07T22:27:00' },
+          { t:'Download documento masterclass', file:"LFD_-_Masterclass_CEO_feminina_de_dia_mulher_noite.pdf", date:'2026-09-07T22:27:00' }
+        ]},
+        { label:'Confiança divina', lessons:[
+          { t:'Transmissão divina', video:'e4eb784d89397ad0229bc66c6116f933df38a7d3' },
+          { t:'Download áudio', file:"ConfiancaDivina_audio.m4a", date:'2026-09-07T22:27:00' },
+          { t:'Download documento masterclass', file:"LFD_Masterclass_Confian_a_divina.pdf", date:'2026-09-07T22:27:00' },
+          { t:'Meditação de libertação de medos', file:"LFD_Meditacao_Libertacao_de_medos.mp3", date:'2026-09-07T22:27:00' }
+        ]},
+        { label:'Canalizar, escrever e publicar o teu livro bestseller', lessons:[
+          { t:'Transmissão divina', video:'1e655da9bc4c7a462e5254364a1768509e0eac70' },
+          { t:'Download áudio', file:"LFD_audio_Masterclass_Canalizar_escrever_e_publicar_o_teu_livro_bestseller.m4a", date:'2026-09-07T22:27:00' },
+          { t:'Download documento masterclass', file:"LFD_Masterclass_Canalizar_escrever_e_publicar_o_teu_livro_bestseller.pdf", date:'2026-09-07T22:27:00' }
+        ]},
+        { label:'A energia feminina e masculina de um negócio milionário', lessons:[
+          { t:'Transmissão divina' },
+          { t:'Download áudio', file:"LFD_Audio_Masterclass_A_energia_feminina_e_masculina_de_um_neg_cio_milion_rio.m4a", date:'2026-09-07T22:28:00' },
+          { t:'Download documento masterclass', file:"LFD_Masterclass_A_energia_feminina_e_masculina_de_um_neg_cio_milion_rio.pdf", date:'2026-09-07T22:28:00' }
+        ]}
+      ]},
+      { label:'Sessões de Q&A', modules:[
+        { label:'Q&A Sessão 1 — 28/03/2023', lessons:[ { t:'Gravação', video:'38ba9f3abf76074da46e0fe31285e1a461fdc721' }, { t:'Download áudio', file:"LFD_-_Audio_Sessao_Q_A.m4a", date:'2026-09-07T22:28:00' } ]},
+        { label:'Q&A Sessão 2 — 26/04/2023', lessons:[ { t:'Gravação', video:'2a28c0ed1ccf7f71a27b35fdc027954852647289' }, { t:'Download áudio', file:"LFD_-_Audio_Sessao_Q_A (1).m4a", date:'2026-09-07T22:28:00' } ]},
+        { label:'Q&A Sessão 3 — 30/05/2023', lessons:[ { t:'Gravação', video:'981720392b978a5a81ccbfdfbe8dc8ade9245178' }, { t:'Download áudio', file:"LFD_audio_sessao_Q_A_3.m4a", date:'2026-09-07T22:28:00' }, { t:'Download documento de suporte' } ]},
+        { label:'Q&A Sessão 4 — 28/06/2023', lessons:[ { t:'Gravação', video:'42593feb0af42a19f732a02a15515c302c6a3389' }, { t:'Download áudio', file:"QA_junho_audio.m4a", date:'2026-09-07T22:29:00' } ]},
+        { label:'Q&A Sessão 5 — 02/08/2023', lessons:[ { t:'Gravação', video:'833d8b786de5d59b43731fa52f374f4f57d27c5e' }, { t:'Download áudio', file:"LFD_audio_sessao_QA_5.m4a", date:'2026-09-07T22:29:00' } ]},
+        { label:'Q&A Sessão 6 — 16/08/2023', lessons:[ { t:'Gravação', video:'76f8d2818ee5f27db0973df1918e7028204a76e3' }, { t:'Download áudio', file:"LFD_audio_sessao_QA_6.m4a", date:'2026-09-07T22:29:00' } ]},
+        { label:'Q&A Sessão 7 — 06/09/2023', lessons:[ { t:'Gravação', video:'a7d54691b980fd8d93112318d9604fc7b30e5c6e' }, { t:'Download áudio', file:"LFD_audio_sessao_QA_7.m4a", date:'2026-09-07T22:30:00' } ]},
+        { label:'Q&A Sessão 8 — 11/10/2023', lessons:[ { t:'Gravação', video:'26ddd642658dd5405986ecf292ef9aaf8bf85d53' }, { t:'Download áudio', file:"QA_Sessao8.m4a", date:'2026-09-07T22:29:00' } ]},
+        { label:'Q&A Sessão 9 — 15/11/2023', lessons:[ { t:'Gravação', video:'8c811f0e3ac55c7a38f684c1fd80943e524f6ea4' }, { t:'Download áudio', file:"QA_Sessao9_audio.m4a", date:'2026-09-07T22:30:00' } ]},
+        { label:'Q&A Sessão 10 — 10/01/2024', lessons:[ { t:'Gravação', video:'e62ea8a9a3feee1997d2d25ec8edeac414681a7d' }, { t:'Download áudio' } ]},
+        { label:'Sessão de Conexão com 2023 & Intenções para 2024', lessons:[ { t:'Transmissão divina', video:'baecc21b02f2096b84d9d1cf3aff0483aa2f408d' }, { t:'Download áudio' } ]}
+      ]},
+      { label:'Sessões com convidadas especiais', modules:[
+        { label:'Como criar um site — Margarida Salvado', lessons:[ { t:'Gravação', video:'a70cc8bd10b0f188187f61c7b3392c781a9187df' }, { t:'Download áudio', file:"Audio_Como_criar_um_site_-_por_Margarida_Salvado.m4a", date:'2026-09-07T22:30:00' } ]},
+        { label:'Abrir atividade e obrigações fiscais — Joana Antunes', lessons:[ { t:'Gravação', video:'c484615ddf09d8c4918790416213df10eddf0c47' }, { t:'Download áudio', file:"Audio_Abrir_atividade_e_obriga_es_fiscais_-_Por_Joana_Antunes.m4a", date:'2026-09-07T22:30:00' } ]},
+        { label:'Como escrever e publicar um livro — Ana Viegas', lessons:[ { t:'Gravação', video:'c755452bc6fb690ff8e12513ae4a1e270f45bfb0' }, { t:'Download áudio', file:"Audio_Como_escrever_e_publicar_um_livro_de_sucesso_-_Por_Ana_Viegas.m4a", date:'2026-09-07T22:30:00' } ]}
+      ]},
+      { label:'Bónus especiais', modules:[
+        { label:'Bónus', lessons:[
+          { t:'Manifesto LFD', file:"Manifesto_LFD.png", date:'2026-09-07T22:30:00' },
+          { t:'Meditação de Alinhamento à Abundância', file:"Medita_o_Abund_ncia.mp3", date:'2026-09-07T22:30:00' }
+        ]}
+      ]}
+    ]},
+    { key:'mm', name:'Mulheres Magnéticas', note:'Método quântico de manifestação, 4 módulos + Jornada de Cura.', downloadDate:'2026-09-07T22:36:00', publishDate:'2024-01-09', cover:'https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/file-uploads/site/2147572331/products/aedd387-8ab6-456f-a6d-570d16810a4_Capas_produtos_1_.jpg', sections:[
+      { label:'Bem-vinda', modules:[
+        { label:'Introdução', lessons:[
+          { t:'Ritual de preparação', file:"Mulheres_Magneticas_-_Ritual_prepara_o.pdf", date:'2026-09-07T22:36:00' },
+          { t:'Meditação Manifesta a vida dos teus sonhos', file:"Manifesta_a_vida_dos_teus_sonhos.mp3", date:'2026-09-07T22:36:00' }
+        ]}
+      ]},
+      { label:'Mulheres Magnéticas', modules:[
+        { label:'Módulo 1 — Método quântico de manifestação', lessons:[
+          { t:'Transmissão divina', video:'9a509af28d31dc2be4c078f90e2bd7fa51e84247' },
+          { t:'Download áudio', file:"MMAG_M1_audio.m4a", date:'2026-09-07T22:36:00' },
+          { t:'Método de Manifestação com Journaling', file:"MM24_M1_M_todo_de_Manifesta_o_com_Journaling.pdf", date:'2026-09-07T22:36:00' },
+          { t:'Exercício Mulheres Magnéticas Módulo 1', file:"MM24_M1_Exerc_cio_M1.pdf", date:'2026-09-07T22:36:00' }
+        ]},
+        { label:'Módulo 2 — Abertura ao magnetismo feminino', lessons:[
+          { t:'Transmissão divina', video:'5ea33b2d132e950e8e708eadbd0625000125ce8c' },
+          { t:'Download áudio', file:"MMAG_M2_AUDIO.m4a", date:'2026-09-07T22:36:00' },
+          { t:'Escala de orientação emocional de Abraham-Hicks', file:"MM24_M2_Escala_de_orienta_o_emocional_de_Abraham-Hicks.pdf", date:'2026-09-07T22:36:00' },
+          { t:'Exercício Mulheres Magnéticas Módulo 2', file:"MM24_M2_Exerc_cios_M2.pdf", date:'2026-09-07T22:36:00' }
+        ]},
+        { label:'Módulo 3 — O masculino e o feminino da manifestação', lessons:[
+          { t:'Transmissão divina', video:'ddcba440b8c6a59b3aa6bc49aa60801a182209a5' },
+          { t:'Download áudio', file:"MMAG_M3_AUDIO.m4a", date:'2026-09-07T22:36:00' },
+          { t:'Manifestação orgásmica', file:"MM24_M3_Manifestac_a_o_orga_smica.pdf", date:'2026-09-07T22:36:00' }
+        ]},
+        { label:'Módulo 4 — Match energético com o Universo', lessons:[
+          { t:'Transmissão divina', video:'cbe9bd61ce496a494120c92ea850ef596cf9994f' },
+          { t:'Download áudio', file:"MMAG_M4_AUDIO.m4a", date:'2026-09-07T22:36:00' },
+          { t:'O mantra que mudou a minha vida', file:"MM24_M4_Mantra.pdf", date:'2026-09-07T22:36:00' }
+        ]},
+        { label:'Jornada de Cura & Libertação', lessons:[
+          { t:'Transmissão divina', video:'305021b786aeed7309ee1545359dad3df043f0d5' },
+          { t:'Download áudio', file:"MMAG_JCL_AUDIO.m4a", date:'2026-09-07T22:37:00' },
+          { t:'Journaling compreender os bloqueios da manifestação', file:"MM24Jornada_Journaling_compreender_os_bloqueios_da_manifestac_a_o.pdf", date:'2026-09-07T22:37:00' },
+          { t:'Alquimia da manifestação', file:"MM24JornadaAlquimia_da_manifestac_a_o.pdf", date:'2026-09-07T22:37:00' },
+          { t:'Manifesta o amor da tua vida', file:"MM24JornadaManifesta_o_amor_da_tua_vida.pdf", date:'2026-09-07T22:37:00' }
+        ]}
+      ]},
+      { label:'Apoio de utilização', modules:[
+        { label:'Apoio', lessons:[ { t:'Apoio de utilização' } ]}
+      ]}
+    ]},
+    { key:'mmd', name:'Mulher Multidimensional', note:'5 módulos.', downloadDate:'2026-09-07T22:38:00', publishDate:'2024-01-29', cover:'https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/file-uploads/site/2147572331/products/bb0bc65-2fd2-268d-7436-2240f41aa67_Capas_produtos_2_.jpg', sections:[
+      { label:'Módulos', modules:[
+        { label:'Módulo 1', lessons:[ { t:'Transmissão divina', video:'c33f433aaa169f5a88aa0e252b20a32421bd2c59', file:"MMulti_Modulo_1.m4a", date:'2026-09-07T22:38:00' } ]},
+        { label:'Módulo 2', lessons:[ { t:'Transmissão divina', video:'2f1f0f72b5cf1367c772125d31b350cd9aa840f5', file:"MMulti_Mo_dulo_2.m4a", date:'2026-09-07T22:38:00' } ]},
+        { label:'Módulo 3', lessons:[ { t:'Transmissão divina', video:'65968bfeab270228e23d3c9230ba8f14e22e230d', file:"MMulti_Modulo3_audio.m4a", date:'2026-09-07T22:38:00' } ]},
+        { label:'Módulo 4', lessons:[ { t:'Transmissão divina', video:'8424cf5719da7b43af0932ffe2fe27b1dee53a32', file:"MMulti_Mo_dulo_4_.m4a", date:'2026-09-07T22:39:00' } ]},
+        { label:'Módulo 5', lessons:[ { t:'Transmissão divina', video:'abc7e4d8170cda6b4de465d2005f3c313d9f467f', file:"MMulti_Mo_dulo_5_.m4a", date:'2026-09-07T22:39:00' } ]}
+      ]},
+      { label:'Bónus', modules:[
+        { label:'Meditação', lessons:[ { t:'Manifesta a vida dos teus sonhos', file:"Manifesta_a_vida_dos_teus_sonhos.mp3", date:'2026-09-07T22:38:00' } ] }
+      ]}
+    ]},
+    { key:'llsb', name:'The Love, Life, Sex & Biz', note:'LOVE + LIFE + SEX + BIZ + Extras.', downloadDate:'2026-09-07T22:40:00', publishDate:'2024-05-25', cover:'https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/file-uploads/sites/2147572331/images/18140a-8e1-0d00-d73d-c5a48d4445ef_Cover_news_besties_date_MM.png', sections:[
+      { label:'Todas as aulas em vídeo', modules:[
+        { label:'LOVE', lessons:[
+          { t:'Date Like a Queen', file:"QueenClass_DateLikeaQueen.m4a", date:'2026-09-07T22:40:00' },
+          { t:'Q&A — Queen of Love Integration & What Men Want', file:"audio1107576894.m4a", date:'2026-09-07T22:40:00' },
+          { t:'The Love Immersion — Parte 1', video:'a341135e6ba2803919b056d3c4f4bbf3b908df00', file:"The_Love_Immersion.m4a", date:'2026-09-07T22:40:00' },
+          { t:'The Love Immersion — Parte 2', video:'251d3886e6480e7204684f3abee5eeb7bc36bb08', file:"The_Love_Immersion (1).m4a", date:'2026-09-07T22:40:00' },
+          { t:'The Love Immersion — Parte 3', video:'6a07a6023ae95885f8b9846d6290fa69356783f2', file:"The_Love_Immersion (2).m4a", date:'2026-09-07T22:40:00' },
+          { t:'Queen Class: Become his Lover', video:'7450411f78f40ff17bcfb8e60d54f933677e5575' },
+          { t:'Hot Romance', video:'403b7fd90276a7473609247bc252b2ef9950cd80' },
+          { t:'Priestess Ritual — Abril', file:"PriestessRitual_abril.m4a", date:'2026-09-07T22:40:00' }
+        ]},
+        { label:'Queen Class mensais', lessons:[
+          { t:'Queen Class — Abril', file:"QueenClassAbr.mp3", date:'2026-09-07T22:41:00' },
+          { t:'Queen Class — Junho', file:"QueenClassJunho.m4a", date:'2026-09-07T22:42:00' },
+          { t:'Queen Class — Julho', file:"QueenClass_Julho.m4a", date:'2026-09-07T22:46:00' }
+        ]},
+        { label:'LIFE', lessons:[
+          { t:'The End of an Era', video:'baa8165eef46f124e256f5ff1f79466222fb14f2' },
+          { t:'Queen Class — A Life Written Like a Romance', video:'26d93ed24d87f6beea8429e8484d7410cd633fc2' },
+          { t:'Queen Class — Miracle Mindset', video:'5a114bae59957578562a5e9cf8ea9e1272c445eb', file:"MM.mp3", date:'2026-09-07T22:45:00' },
+          { t:'Queen Class — Be the Manifestation Queen', video:'f3fca7086a803c1cce63a8c7fceee868c5bbe533', file:"Manifestation_Queen_Identity.png", date:'2026-09-07T22:42:00' },
+          { t:'Queen Class — Divine Devotion', video:'6027d620265dff6d3a75835b51e043761bcb4be4' },
+          { t:'Queen Class — Divine Devotion Parte 2', video:'e007788ba9968f8ca8ae08793f802e2d536a1cda' },
+          { t:'Queen Class — Desire Queen', video:'d9e058b906692158e80e0bd79a0bb804c2cae09b' },
+          { t:'Queen Class — Quantum Queen', video:'4c212f3d5574d04162e54ec923281b773f4958c2', file:"Quantum_Queen.mp3", date:'2026-09-07T22:43:00' },
+          { t:'Queen Class — Channeling Queen', video:'b0db4f1affaa2b09f682b9da7b958585177e6eb7', file:"QueenClass_Channeling.mp3", date:'2026-09-07T22:44:00' },
+          { t:'Queen Class — #HERyear', video:'b821c52d2b601dca31cef9b75935c17187411efe', file:"Besties_Date_-_HERyear.pdf", date:'2026-09-07T22:43:00' }
+        ]},
+        { label:'SEX', lessons:[
+          { t:'The S€x Immersion — Parte 1', video:'2ffccf298044034ebd8e58e449f623cc391f5aa1', file:"TSIAudio.mp3", date:'2026-09-07T22:44:00' },
+          { t:'The S€x Immersion — Parte 2', video:'b5a90d166d25efcb7d8bf37ca070375b666ee5cc', file:"TSIAudio (1).mp3", date:'2026-09-07T22:44:00' },
+          { t:'S€x Goddess — Queen Class Parte 1', video:'1e9ccaefb6d4223505e2701391ba23917e39830d' },
+          { t:'S€x Goddess — Queen Class Parte 2', video:'a68541ceff80ee00375167d1ad098bef5783ffbe' },
+          { t:'Money & Orgasms — Queen Class', video:'22b16bcad93c5350e40a67b40c885105ac265b41' },
+          { t:'Lover in Bed — Queen Class', video:'4d4e9de8bcbba91b160d8aaa33bd52f47e0bdd96' }
+        ]},
+        { label:'BIZ', lessons:[
+          { t:'Wealthy Woman — Queen Class', video:'314463db3ebd08f2d8ef7374938b413911fbf879' },
+          { t:'Watch Me World — Queen Class', video:'c8cade0a2f81ca5bd14e16f44210ad76a1899f11' },
+          { t:'Meditação (Watch Me World)', video:'2999068738cbd7787c772a71ce9d5eded4394a66' },
+          { t:'Biz Queen Upgrade — Parte 1', video:'b01838564693dd197091ea88ab54f6eddff70555' },
+          { t:'Biz Queen Upgrade — Parte 2', video:'5d57c2535963c5d5b029207b3f847159dbb1a98b' },
+          { t:'Lover in Business — Flirt to Sell (Parte 1)', video:'bc7a0d380d9dfc1ab8d1a925db7d03c8117d2548' },
+          { t:'Lover in Business — Flirt to Sell (Parte 2)', video:'27f66f2916cf0a0e212ba283af67a1b39c039f06' },
+          { t:'Aula Bónus — Your Next BIG Idea Parte 1 (áudio)', file:"YourNextBigIdea.mp3", date:'2026-09-07T22:46:00' },
+          { t:'Aula Bónus — Your Next BIG Idea Parte 1 (PDF)', file:"Your_Next_BIG_Idea.pdf", date:'2026-09-07T22:46:00' },
+          { t:'Aula Bónus — Your Next BIG Idea Parte 2 (áudio)', file:"YourNextBigIdea (1).mp3", date:'2026-09-07T22:46:00' },
+          { t:'Aula Bónus — Your Next BIG Idea Parte 2 (PDF)', file:"Your_Next_BIG_Idea (1).pdf", date:'2026-09-07T22:46:00' },
+          { t:'Aula Bónus — Your Next BIG Idea Parte 3 (áudio)', file:"YourNextBigIdea (2).mp3", date:'2026-09-07T22:46:00' },
+          { t:'Aula Bónus — Your Next BIG Idea Parte 3 (PDF)', file:"Your_Next_BIG_Idea (2).pdf", date:'2026-09-07T22:46:00' },
+          { t:'The Biz Immersion — Parte 1', video:'ecb4fd2d650600f91e5490ed777703b7fb535316' },
+          { t:'Be Seen in Biz — Queen Class Parte 1', video:'49580743fa55ec5ccbc71c4b550181b4a4994635' },
+          { t:'Be Seen in Biz — Queen Class Parte 2', video:'79b7dc534c7fffe952f0f316cd21bc8e8bca48e1' }
+        ]},
+        { label:'EXTRAS', lessons:[
+          { t:'Guest Speaker — Diogo Cardoso', video:'98a87eff2010ff66033b11854ee4e3bd2f0f535f', file:"Diogo.mp3", date:'2026-09-07T22:47:00' },
+          { t:'The Anniversary Party', file:"Party_MM.mp3", date:'2026-09-07T22:47:00' },
+          { t:'Queen of the Month — Ana Paulino', video:'5422c7b03552f2b0659e65d8c3e9a2cacce04564', file:"Ana_PaulinoAudio.mp3", date:'2026-09-07T22:47:00' },
+          { t:'Queen of the Month — Ana Paulino Parte 2', video:'bcebc4209a7fa791dcd18d2fb46143e43895d0c1', file:"Ana_PaulinoAudio (1).mp3", date:'2026-09-07T22:47:00' },
+          { t:'Rita Penteado — The woman who decided to have it all', video:'4e283c00cf4bc16652ada22f7c7b32ebbf7f8241' }
+        ]}
+      ]}
+    ]},
+    { key:'dq', name:'Desire Queen', note:'4 módulos + Besties Date.', downloadDate:'2026-09-07T22:53:00', publishDate:'2025-01-16', cover:'https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/file-uploads/site/2147572331/products/c64085-84c8-5e05-6e07-fa733c6182_Untitled-1.png', sections:[
+      { label:'Módulos', modules:[
+        { label:'Módulo 1 — You are being manifested', lessons:[
+          { t:'Transmissão', video:'311afc4a09fbaf7759c0874d3158a97e76e1572c' },
+          { t:'Download áudio', file:"Modulo1_Audio.mp3", date:'2026-09-07T22:53:00' },
+          { t:'Meditação', video:'02da04189c81f265ed2679ced55155b878cb8327', file:"Meditacao.wav", date:'2026-09-07T22:53:00' }
+        ]},
+        { label:'Módulo 2 — You are the Desire Queen', lessons:[
+          { t:'Transmissão', video:'2bd5e0964aca3c9ba1b3fd54a61d1de44024b9f9', file:"DesireQueen2.mp3", date:'2026-09-07T22:54:00' },
+          { t:'Meditação', video:'e404a77767f32bc5cc29afa167b6c07b0ba1b40b', file:"DesireQueen2Medita_o.mp3", date:'2026-09-07T22:53:00' }
+        ]},
+        { label:'Módulo 3 — Desired by love, clients & money', lessons:[
+          { t:'Parte 1 (Meditação)', video:'e5b5b25e91a3a1e6764f065e3134872a0cf8ec4d' },
+          { t:'Parte 2', video:'a044269ad729dab17b0c205554fd719d0919b885', file:"DQ3_pt2.mp3", date:'2026-09-07T22:54:00' }
+        ]},
+        { label:'Módulo 4 — Desired by miracles & quantum leaps', lessons:[
+          { t:'Transmissão', video:'db061ebab968f43e7eb04471012f9b43671fac75', file:"DQ4.mp3", date:'2026-09-07T22:54:00' }
+        ]},
+        { label:'Besties Date', lessons:[
+          { t:'Besties Date: Desire Queen', video:'9f537117f60cbd3b8222842115a2e89575144aa3' }
+        ]}
+      ]}
+    ]},
+    { key:'mce', name:'Your Main Character Era', note:'2 partes + The Upgraded Class.', downloadDate:'2026-09-07T22:55:00', publishDate:'2025-02-03', cover:'https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/file-uploads/site/2147572331/products/c800627-52ec-1452-d44-067281a8e4c_e5558173-28ba-495f-ad61-a5a03db9a00a.png', sections:[
+      { label:'Aulas', modules:[
+        { label:'Your Main Character Era', lessons:[
+          { t:'Parte 1', video:'7da4773a89e2441bdd3c438ba312b94dbe4a0ac7', file:"YMCE.mp3", date:'2026-09-07T22:55:00' },
+          { t:'Parte 2', video:'fcb18c2f68409c93c1c1ead5c44644fd02144cdc' }
+        ]},
+        { label:'The Upgraded Class', lessons:[
+          { t:'Parte 1', video:'c694ff96242aac99527cfcdfe285ad05ce9d2bc8' },
+          { t:'Parte 2', video:'6b104df1224f610722062bfcb30a7e7b090c954c' }
+        ]}
+      ]}
+    ]},
+    { key:'tdo', name:'The Dream Offer', note:'3 módulos + Mastermind Call.', downloadDate:'2026-09-07T22:56:00', publishDate:'2025-05-21', cover:'https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/file-uploads/site/2147572331/products/74cf716-14c6-4de-26c7-a550fa6b7720_Cover_NEWS_THE_DREAM_OFFER_1_.jpg', sections:[
+      { label:'Módulos', modules:[
+        { label:'Introdução', lessons:[ { t:'Introdução', video:'ce0f4c282da72b99090654f4c88af866c0333bad', file:"The_Dream_Offer_Intro.mp3", date:'2026-09-07T22:56:00' } ]},
+        { label:'Módulo 1 — The alignment & creatrix codes', lessons:[ { t:'Transmissão', video:'8bf2a8db82f42e967df2f3bef267671a66f095e8', file:"The_Dream_Offer_M_dulo_1.mp3", date:'2026-09-07T22:56:00' } ]},
+        { label:'Módulo 2 — The sales seduction & desire that never ends', lessons:[ { t:'Transmissão', video:'6702838bf63e5d49940bdb2b95744a8f2eaed4a6', file:"The_Dream_Offer_M_dulo_2.mp3", date:'2026-09-07T22:56:00' } ]},
+        { label:'Módulo 3 — The Client Love', lessons:[ { t:'Transmissão', video:'938698910a6d298b5608db4d784e37668b09db99', file:"The_Dream_Offer_M_dulo_3.mp3", date:'2026-09-07T22:56:00' } ]},
+        { label:'Special Mastermind Call', lessons:[ { t:'The Dream Offer — Special Mastermind Call', video:'755cca4c1b766dadc38ecb933c7c6617a0805893', file:"DreamOffer.mp3", date:'2026-09-07T22:56:00' } ]}
+      ]}
+    ]},
+    { key:'ysya', name:'Your Story Your Art', note:'5 módulos + Story Mastery Day.', downloadDate:'2026-09-07T22:59:00', publishDate:'2026-05-28', cover:'https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/file-uploads/sites/2147572331/images/73e4e04-f2e1-d7ef-1e4-c17124ab38b_YSYA_COVER_NEWS.png', sections:[
+      { label:'Módulos', modules:[
+        { label:'Módulo 1: The Lived Story', lessons:[ { t:'Transmissão', video:'27a85711dbe8a9fc11e93e83efaf1d0e476aea91' } ]},
+        { label:'Módulo 2: Embodiment & Invisible Communication', lessons:[ { t:'Transmissão', video:'91fab5c2eea7028020b7852f57aaeaf5ff664508' } ]},
+        { label:'Módulo 3: Story & Narrative Creation', lessons:[ { t:'Transmissão', video:'13a0c911e2a0a8d2a2a633554a87082b2e675ed6', file:"Your_Story_Your_Art_Mo_dulo_3.pdf", date:'2026-09-07T22:59:00' } ]},
+        { label:'Story Mastery Day', lessons:[ { t:'Transmissão', video:'8a9b155fdb693fcd0859086004ca387fb8db8a86', file:"Story_Mastery_Day.pdf", date:'2026-09-07T22:59:00' } ]},
+        { label:'Módulo 4: Irresistible Teasing', lessons:[ { t:'Transmissão', video:'50d2fd84257135eec5793b543ec73854af135d04' } ]},
+        { label:'Módulo 5: Story-led Sales Authority', lessons:[ { t:'Transmissão', video:'8e731ea6a32a5cec706ade1c77e4e0bb2e1d0605', file:"Mo_dulo_5_Histo_rias.pdf", date:'2026-09-07T22:59:00' } ]},
+        { label:'Story Mastery Day — Imersão Extra', lessons:[
+          { t:'Transmissão', video:'411c5d3d802ee45e49d75c8952a40367fca0f88b' },
+          { t:'Todas as histórias', file:"Story_Mastery_Day_Imersa_o_Extra_Todas_as_histo_rias.pdf", date:'2026-09-07T22:59:00' },
+          { t:'Histórias com sozinhos', file:"Story_Mastery_Day_Imersa_o_Extra_Histo_rias_com_sozinhos.pdf", date:'2026-09-07T22:59:00' }
+        ]}
+      ]}
+    ]},
+    { key:'fbs', name:'Femme Biz School', note:'Sessões, imersões e minimind — o que já está desbloqueado (20% do curso).', downloadDate:'2026-09-07T22:49:00', publishDate:'2026-07-08', cover:'https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/file-uploads/site/2147572331/products/87bfcca-60da-8231-e827-c6cec1ec650_f77adc8c-faf3-405c-84f4-64d012524ec0.png', sections:[
+      { label:'Aulas em vídeo', modules:[
+        { label:'Onboarding & Summit', lessons:[
+          { t:'Sessão Onboarding', video:'b123adf991eb390f1e1a15c81b02e7927e41b656' },
+          { t:'Gravação Zoom — Onboarding (1)', file:"Zoom_FBS.mp3", date:'2026-09-07T22:49:00' },
+          { t:'Gravação Zoom — Onboarding (2)', file:"Zoom_FBS (1).mp3", date:'2026-09-07T22:49:00' },
+          { t:'Summit — Dia 1', video:'24e0ab6baf8be997955c209d3c35360efebf273d' },
+          { t:'Summit — Dia 2', video:'e83592cfd52cac1e395099fb7a914196b20597c0' },
+          { t:'Summit — Dia 3', video:'cab64f55138928845fa73dad065793e64c1ec378' },
+          { t:'Summit — Dia 4 Parte 1', video:'306fd6e90c95cd65f74c82098df30b592e47b15b' },
+          { t:'Summit — Dia 4 Parte 2', video:'e66c9a0f9276b2ada5e8659cb63c40afda8e7a0a' }
+        ]},
+        { label:'Femme Vision & Wealthy Woman', lessons:[
+          { t:'Femme Vision — Parte 1 (Meditação)', video:'5e793e0808ca8d3168e3e176d3e025ea79abf7b9' },
+          { t:'Femme Vision — Parte 2', video:'72c894de80fdfe503b6b5bbd0f30496c1284adbc' },
+          { t:'Femme Vision — Parte 3', video:'0c3604dc0fc012f120434c7206cb2f0f549b92c7' },
+          { t:'Wealthy Woman Codes — Parte 1', video:'141f4962f1ab2c66fc6a810ac8bff99c616a23ce' },
+          { t:'Wealthy Woman Codes — Parte 2', video:'f44f39189735aecbd14ea1c08c142a53c571f0e8' }
+        ]},
+        { label:'Vendas & Oferta', lessons:[
+          { t:'Flirt to Sell: Femme Sales Advanced Training', video:'4f35a55cbfe50d06ed8bd9eacf62fee50d4cd4c6' },
+          { t:'Flirt to Sell — The Strategy Edition', video:'f5673ac5a796e5d4fd8e08e35c12dde6bef11791' },
+          { t:'Femme Offer Creatrix — The Immersion', video:'955e605c63a49c5b39d372eb0bcd984a40d844ae' },
+          { t:'Personal Power & Personal Brand — The Immersion', video:'9b76d04df39ea05c506a4df14bbfb58b267223fa' },
+          { t:'Client Devotion', video:'25aee6f4febecc04a8a749e7bfede76973d165ee' }
+        ]},
+        { label:'Redes & Palco', lessons:[
+          { t:'Sexy Socials — Parte 1', video:'8ac9679cb56693753ac491bda0d4fdd13c9212cd' },
+          { t:'Sexy Socials — Parte 2', video:'6aa84136d485a42590215e133bc60b7b4d5af437' },
+          { t:'Behind the Stage — Parte 1', video:'ad44e044726ead4138e01ecb6080744345b49665' },
+          { t:'Behind the Stage — Parte 2', video:'8b614471ed8b43f365a61b8a9b4e07a25f255d6b' }
+        ]},
+        { label:'HER Transmission & Masterpiece', lessons:[
+          { t:'HER Transmission', video:'9f4d7e7b7596bb624f45da14970da9c164c29635' },
+          { t:'HER Transmission Audit', video:'ee6a00fc74d4c2b84375fc7ff497e48337d2feb6' },
+          { t:'Femme Biz Masterpiece Season', video:'541a33c5204fb93b5fb73a5a62a6876f71dc08cd' }
+        ]},
+        { label:'Summer Camp Minimind', lessons:[
+          { t:'Minimind 1', video:'286136e45c8c7cc7801e177d2bcdcc128ab6acf6' },
+          { t:'Minimind 2', video:'1428edc7c0c51434a0be0bbc1e633ea9f34b0408' },
+          { t:'Minimind 3', video:'02b788de5db0d995694200090623ad2ade51b447' },
+          { t:'Minimind 4', video:'ba1988298e5d678858b50e5296ea4b95a0b4e3e3' }
+        ]},
+        { label:'Mentoring & Convidados', lessons:[
+          { t:'Mentoring Group Call — Fevereiro', file:"FBS_Fev.mp3", date:'2026-09-07T22:50:00' },
+          { t:'Mentoring Group Call — Junho', file:"FBS_JUN.mp3", date:'2026-09-07T22:50:00' },
+          { t:'Mentoring Group Call — Abril', video:'a9c56f52ebdd7b7cb8ab324ac24b950aa570a295' },
+          { t:'Mentoring Group Call — Maio', video:'f787cbbb1c20153d7a8648d68dd5ede6b56b7fca' },
+          { t:'Courtney Tidona — Volume Offers', video:'8466230d051e92c1459322f357bc7ef31cf81e6e', file:"Courtney_Tidona.mp3", date:'2026-09-07T22:52:00' },
+          { t:'Madalena Dragon — The Viral Queen Class', video:'de8f943fe91a806427c5de0ae085438a38f652cd' }
+        ]},
+        { label:'Ainda por desbloquear (só documento)', lessons:[
+          { t:'Femme CEO Era — Parte 1', file:"Femme_CEO_Era_-_PDF.pdf", date:'2026-09-07T22:50:00' },
+          { t:'Femme CEO Era — Parte 2', file:"Femme_CEO_Era_-_PDF (1).pdf", date:'2026-09-07T22:51:00' },
+          { t:'Recurso — 100 Sign Ups', file:"100_Sign_Ups.pdf", date:'2026-09-07T22:52:00' }
+        ]}
+      ]}
+    ]},
+  ];
+
+  var LESSONS = [];
+  COURSES.forEach(function(course){
+    course.sections.forEach(function(section, si){
+      section.modules.forEach(function(mod, mi){
+        mod.id = course.key + '-s' + si + '-m' + mi;
+        mod.lessonIds = [];
+        mod.lessons.forEach(function(lesson, li){
+          var id = mod.id + '-' + li;
+          mod.lessonIds.push(id);
+          LESSONS.push({
+            id:id, title:lesson.t, courseKey:course.key, courseName:course.name,
+            sectionLabel:section.label, moduleId:mod.id, moduleLabel:mod.label,
+            video: lesson.video || null, file: lesson.file || null, fileDate: lesson.date || null
+          });
+        });
+      });
+    });
+  });
+
+  var state = {};
+  LESSONS.forEach(function(l){ state[l.id] = { ouvido:false, sentimento:'', nextStep:'', updatedAt:null }; });
+
+  var currentFilter = 'todas';
+  var currentSearch = '';
+  var expandedLessons = {};
+  var expandedModules = {};
+  var saveTimers = {};
+
+  function fmtDate(iso){
+    if(!iso) return '';
+    try{ var d = new Date(iso); return d.toLocaleDateString('pt-PT', { day:'2-digit', month:'short' }); }catch(e){ return ''; }
+  }
+  function fmtDateYear(iso){
+    if(!iso) return '';
+    try{ var d = new Date(iso + 'T12:00:00'); return d.toLocaleDateString('pt-PT', { day:'2-digit', month:'short', year:'numeric' }); }catch(e){ return ''; }
+  }
+  function fmtDateTime(iso){
+    if(!iso) return '';
+    try{
+      var d = new Date(iso);
+      return d.toLocaleDateString('pt-PT', { day:'2-digit', month:'short' }) + ', ' + d.toLocaleTimeString('pt-PT', { hour:'2-digit', minute:'2-digit' });
+    }catch(e){ return ''; }
+  }
+
+  function persistLocal(){
+    try{ localStorage.setItem('escuta-sagrada-state', JSON.stringify(state)); }catch(e){}
+  }
+  function loadLocal(){
+    try{
+      var raw = localStorage.getItem('escuta-sagrada-state');
+      if(raw){
+        var parsed = JSON.parse(raw);
+        Object.keys(parsed).forEach(function(id){ if(state[id]) state[id] = Object.assign(state[id], parsed[id]); });
+      }
+    }catch(e){}
+  }
+
+  function saveLesson(id){ persistLocal(); }
+  function scheduleSave(id){ clearTimeout(saveTimers[id]); saveTimers[id] = setTimeout(function(){ saveLesson(id); }, 500); }
+
+  function toggleOuvido(id){
+    var l = state[id];
+    l.ouvido = !l.ouvido;
+    l.updatedAt = new Date().toISOString();
+    saveLesson(id);
+    render();
+  }
+  function updateField(id, field, value){
+    state[id][field] = value;
+    state[id].updatedAt = new Date().toISOString();
+    scheduleSave(id);
+    renderProgress();
+    renderModuleCounts();
+  }
+
+  function matchesFilter(l){
+    var s = state[l.id];
+    if(currentFilter === 'por-ouvir' && s.ouvido) return false;
+    if(currentFilter === 'ouvidas' && !s.ouvido) return false;
+    if(currentFilter === 'com-video' && !l.video) return false;
+    if(currentFilter === 'com-ficheiro' && !l.file) return false;
+    if(currentSearch){
+      var hay = (l.title + ' ' + l.moduleLabel + ' ' + l.courseName).toLowerCase();
+      if(hay.indexOf(currentSearch.toLowerCase()) === -1) return false;
+    }
+    return true;
+  }
+
+  function icon(){ return '<svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'; }
+  function chevron(){ return '<svg class="chevron" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 3.5L11 8L6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'; }
+
+  function renderProgress(){
+    var total = LESSONS.length;
+    var done = LESSONS.filter(function(l){ return state[l.id].ouvido; }).length;
+    var pct = total ? Math.round(done/total*100) : 0;
+    document.querySelector('.aura').style.setProperty('--pct', pct);
+    document.getElementById('auraNum').textContent = pct + '%';
+    document.getElementById('progressDetail').textContent = done + ' de ' + total + ' aulas ouvidas';
+  }
+
+  function renderModuleCounts(){
+    COURSES.forEach(function(course){
+      course.sections.forEach(function(section){
+        section.modules.forEach(function(mod){
+          var el = document.getElementById('count-' + mod.id);
+          if(!el) return;
+          var doneCount = mod.lessonIds.filter(function(id){ return state[id].ouvido; }).length;
+          el.textContent = doneCount + '/' + mod.lessonIds.length;
+          el.parentElement.parentElement.classList.toggle('module-done', doneCount === mod.lessonIds.length);
+        });
+      });
+    });
+  }
+
+  function firstUnfinished(){ return LESSONS.filter(function(l){ return !state[l.id].ouvido; })[0]; }
+
+  function buildLessonEl(l){
+    var s = state[l.id];
+    var wrap = document.createElement('div');
+    wrap.className = 'lesson';
+    wrap.dataset.id = l.id;
+    wrap.dataset.done = s.ouvido ? 'true' : 'false';
+    wrap.dataset.expanded = expandedLessons[l.id] ? 'true' : 'false';
+    var hasNote = !!(s.sentimento || s.nextStep);
+
+    wrap.innerHTML =
+      '<div class="lesson-row">' +
+        '<button class="check" aria-checked="' + s.ouvido + '" aria-label="Marcar como ouvida">' + icon() + '</button>' +
+        '<div class="lesson-main">' +
+          '<div class="lesson-title-row">' +
+            (hasNote ? '<span class="note-dot" title="tem nota"></span>' : '') +
+            '<span class="lesson-title">' + l.title + '</span>' +
+          '</div>' +
+          (s.updatedAt ? '<div class="lesson-meta">atualizado ' + fmtDate(s.updatedAt) + '</div>' : '') +
+          (l.file ? '<div class="file-tag" title="' + l.file + '"><span class="file-tag-label">Ficheiro</span><span class="file-tag-name">' + l.file + '</span><span class="file-tag-date">' + fmtDateTime(l.fileDate) + '</span></div>' : '') +
+          (l.video ? '<div class="video-wrap"><video controls preload="none" playsinline src="https://embed-ssl.wistia.com/deliveries/' + l.video + '.bin"></video></div>' : '') +
+        '</div>' +
+      '</div>' +
+      '<div class="notes">' +
+        '<div><label class="field-label">Como te sentiste</label><textarea data-field="sentimento" placeholder="o que mexeu, o que resistiu, o que abriu...">' + (s.sentimento||'') + '</textarea></div>' +
+        '<div><label class="field-label">Próximo passo — como vais aplicar isto</label><textarea data-field="nextStep" placeholder="uma ação concreta, prática ou decisão">' + (s.nextStep||'') + '</textarea></div>' +
+        '<span class="save-hint">guardado automaticamente neste browser</span>' +
+      '</div>';
+
+    wrap.querySelector('.check').addEventListener('click', function(){ toggleOuvido(l.id); });
+    wrap.querySelector('.lesson-title-row').addEventListener('click', function(){
+      expandedLessons[l.id] = !expandedLessons[l.id];
+      wrap.dataset.expanded = expandedLessons[l.id] ? 'true' : 'false';
+    });
+    wrap.querySelectorAll('textarea').forEach(function(ta){
+      ta.addEventListener('input', function(){ updateField(l.id, ta.dataset.field, ta.value); });
+    });
+    return wrap;
+  }
+
+  function render(){
+    var container = document.getElementById('courses');
+    container.innerHTML = '';
+    var anyVisible = false;
+
+    COURSES.forEach(function(course){
+      var courseLessons = LESSONS.filter(function(l){ return l.courseKey === course.key && matchesFilter(l); });
+      if(courseLessons.length === 0) return;
+      anyVisible = true;
+
+      var courseEl = document.createElement('div');
+      courseEl.className = 'course';
+      courseEl.id = 'course-' + course.key;
+      courseEl.innerHTML =
+        (course.cover ? '<img class="course-cover" src="' + course.cover + '" alt="' + course.name + '">' : '') +
+        '<h2 class="course-title">' + course.name + '</h2><p class="course-note">' + course.note + '</p>';
+
+      course.sections.forEach(function(section, si){
+        var visibleLessons = LESSONS.filter(function(l){ return l.courseKey === course.key && l.sectionLabel === section.label && matchesFilter(l); });
+        if(visibleLessons.length === 0) return;
+
+        var sec = document.createElement('div');
+        sec.className = 'section';
+        sec.innerHTML = '<h3 class="section-title">' + section.label + '</h3>';
+
+        section.modules.forEach(function(mod){
+          var modLessons = mod.lessonIds.map(function(id){ return LESSONS.filter(function(l){return l.id===id;})[0]; }).filter(function(l){ return visibleLessons.indexOf(l) !== -1; });
+          if(modLessons.length === 0) return;
+
+          var doneCount = mod.lessonIds.filter(function(id){ return state[id].ouvido; }).length;
+          var det = document.createElement('details');
+          det.className = 'module' + (doneCount === mod.lessonIds.length ? ' module-done' : '');
+          if(expandedModules[mod.id]) det.open = true;
+          det.addEventListener('toggle', function(){ expandedModules[mod.id] = det.open; });
+
+          var summary = document.createElement('summary');
+          summary.className = 'module-head';
+          summary.innerHTML = chevron() + '<span class="module-title">' + mod.label + '</span><span class="module-count" id="count-' + mod.id + '">' + doneCount + '/' + mod.lessonIds.length + '</span>';
+          det.appendChild(summary);
+
+          var list = document.createElement('div');
+          list.className = 'lesson-list';
+          modLessons.forEach(function(l){ list.appendChild(buildLessonEl(l)); });
+          det.appendChild(list);
+          sec.appendChild(det);
+        });
+        courseEl.appendChild(sec);
+      });
+      container.appendChild(courseEl);
+    });
+
+    if(!anyVisible){ container.innerHTML = '<div class="empty-state">Nenhuma aula corresponde a este filtro.</div>'; }
+    renderProgress();
+  }
+
+  document.getElementById('search').addEventListener('input', function(e){ currentSearch = e.target.value; render(); });
+  document.querySelectorAll('.filter-pill').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.filter-pill').forEach(function(b){ b.setAttribute('aria-pressed','false'); });
+      btn.setAttribute('aria-pressed','true');
+      currentFilter = btn.dataset.filter;
+      render();
+    });
+  });
+  document.getElementById('jumpBtn').addEventListener('click', function(){
+    var next = firstUnfinished();
+    if(!next){ alert('Já ouviste tudo — que jornada. 🤍'); return; }
+    document.querySelectorAll('.filter-pill').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.filter==='todas' ? 'true':'false'); });
+    currentFilter = 'todas'; currentSearch = '';
+    document.getElementById('search').value = '';
+    expandedModules[next.moduleId] = true;
+    expandedLessons[next.id] = true;
+    render();
+    setTimeout(function(){
+      var el = document.querySelector('[data-id="' + next.id + '"]');
+      if(el) el.scrollIntoView({ behavior:'smooth', block:'center' });
+    }, 30);
+  });
+
+  function renderCourseNav(){
+    var nav = document.getElementById('courseNav');
+    nav.innerHTML = COURSES.map(function(course){
+      return '<a href="#course-' + course.key + '">' + course.name + ' <span>' + fmtDateYear(course.publishDate) + '</span></a>';
+    }).join('');
+    nav.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(e){
+        e.preventDefault();
+        var target = document.getElementById(a.getAttribute('href').slice(1));
+        if(target) target.scrollIntoView({ behavior:'smooth', block:'start' });
+      });
+    });
+  }
+
+  initTheme();
+  document.getElementById('themeBtn').addEventListener('click', toggleTheme);
+
+  loadLocal();
+  renderCourseNav();
+  var firstOpenSet = false;
+  for(var i=0;i<LESSONS.length && !firstOpenSet;i++){
+    if(!state[LESSONS[i].id].ouvido){ expandedModules[LESSONS[i].moduleId] = true; firstOpenSet = true; }
+  }
+  render();
+})();
+</script>
+</body>
+</html>
