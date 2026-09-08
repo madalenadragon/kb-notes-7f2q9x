@@ -174,10 +174,35 @@
   .empty-state{ text-align:center; padding: 50px 20px; color: var(--ink-soft); font-family:'Cormorant Garamond', serif; font-style: italic; font-size:17px; }
   footer.note{ margin-top: 44px; padding-top: 22px; border-top:1px solid var(--line); font-size:12.5px; color: var(--ink-faint); line-height:1.7; }
   @media (prefers-reduced-motion: reduce){ .chevron{ transition:none; } }
+
+  .gate{ position:fixed; inset:0; z-index:999; display:flex; align-items:center; justify-content:center; background:linear-gradient(180deg, var(--bg-a), var(--bg-b)); padding:24px; }
+  .gate-card{ max-width:420px; width:100%; background:var(--paper); border-radius:20px; box-shadow:var(--shadow); padding:36px 30px; text-align:center; }
+  .gate-eyebrow{ font-family:'Libre Franklin',sans-serif; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 10px; }
+  .gate-title{ font-family:'Fraunces',serif; font-size:32px; color:var(--ink); margin:0 0 10px; }
+  .gate-title .shine{ background:var(--gradient-accent); -webkit-background-clip:text; background-clip:text; color:transparent; font-style:italic; }
+  .gate-sub{ font-family:'Libre Franklin',sans-serif; font-size:14px; color:var(--ink-soft); margin:0 0 22px; }
+  .gate-form{ display:flex; flex-direction:column; gap:12px; }
+  .gate-input{ font-family:'Libre Franklin',sans-serif; font-size:16px; padding:13px 16px; border-radius:12px; border:1px solid var(--line); background:var(--bg-b); color:var(--ink); outline:none; }
+  .gate-input:focus{ border-color:var(--rose); }
+  .gate-btn{ font-family:'Libre Franklin',sans-serif; font-weight:600; font-size:15px; padding:13px 16px; border-radius:12px; border:none; background:var(--gradient-accent); color:#fff; cursor:pointer; }
+  .gate-btn:disabled{ opacity:.6; cursor:default; }
+  .gate-error{ font-family:'Libre Franklin',sans-serif; font-size:13px; color:var(--wine); margin:14px 0 0; min-height:16px; }
 </style>
 </head>
 <body>
-<div class="wrap">
+<div id="gate" class="gate">
+  <div class="gate-card">
+    <p class="gate-eyebrow">Inês Nunes · todos os cursos</p>
+    <h1 class="gate-title">Escuta <span class="shine">Sagrada</span></h1>
+    <p class="gate-sub">Página privada. Introduz a password para entrar.</p>
+    <form id="gateForm" class="gate-form" autocomplete="off">
+      <input type="password" id="gatePassword" class="gate-input" placeholder="Password" autocomplete="current-password" autofocus>
+      <button type="submit" id="gateSubmit" class="gate-btn">Entrar</button>
+    </form>
+    <p class="gate-error" id="gateError"></p>
+  </div>
+</div>
+<div class="wrap" id="appWrap" style="display:none">
   <header class="top">
     <div class="eyebrow">
       <span class="eyebrow-label">Inês Nunes · todos os cursos</span>
@@ -251,704 +276,317 @@
     applyTheme(next);
   }
 
-  var COURSES = [
-    { key:'rf', name:'Riqueza Feminina', note:'Aura Abundante + Sacred Sales.', downloadDate:'2026-09-07T22:11:00', publishDate:'2022-09-14', cover:'https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/site/2147572331/products/xTr0nqpETCqE6jSdpKmK_16.png', sections:[
-      { label:'Aura Abundante', modules:[
-        { label:'Módulo 1 — Co-criação de riqueza feminina', lessons:[
-          { t:'Transmissão divina', video:'fb20f099d98359c39b531cc159a4e7d4bd0bcdbe' },
-          { t:'Download áudio', file:'Modulo1.mp3', date:'2026-09-07T22:13:00' },
-          { t:'Meditação Co-Criação de Riqueza Feminina', file:'Meditacao_AA_sessao1.mp3', date:'2026-09-07T22:12:00' },
-          { t:'Método de manifestação com journaling', file:'AA_-_M_todo_de_Manifesta_o_com_Journaling.pdf', date:'2026-09-07T22:12:00' }
-        ]},
-        { label:'Módulo 2 — Uma nova história com o dinheiro', lessons:[
-          { t:'Transmissão divina', video:'ca2dcb17d105668c94a1154d19828d276ddbe2eb' },
-          { t:'Download áudio', file:'Sessao_2_audio.mp3', date:'2026-09-07T22:13:00' },
-          { t:'Método CC — Curar & Codificar', file:'MetodoCC_audio.mp3', date:'2026-09-07T22:13:00' },
-          { t:'A tua história com o dinheiro — Journaling', file:'AA_-_A_tua_hist_ria_com_o_dinheiro_Journaling.pdf', date:'2026-09-07T22:13:00' },
-          { t:'Mantras de codificação de riqueza', file:'AA_-_Mantras_de_codifica_o_de_riqueza.pdf', date:'2026-09-07T22:13:00' }
-        ]},
-        { label:'Módulo 3 — Abertura ao desejo', lessons:[
-          { t:'Transmissão divina', video:'71929585b6cfdea18baf1b3f4a86f1a516092d08' },
-          { t:'Download áudio', file:'Sessao_3_audio.mp3', date:'2026-09-07T22:13:00' },
-          { t:'Prática de conexão ao desejo', file:'Pratica_de_conexao_ao_desejo.mp3', date:'2026-09-07T22:13:00' },
-          { t:'Prática de libertação da vergonha', file:'Pratica_de_libertacao_da_vergonha.mp3', date:'2026-09-07T22:14:00' }
-        ]},
-        { label:'Módulo 4 — Abertura ao merecimento', lessons:[
-          { t:'Transmissão divina', video:'a8d952023c9941cb5c22c0f9f2a813ab64c543dd' },
-          { t:'Download áudio', file:'Sessao_4_audio.mp3', date:'2026-09-07T22:14:00' },
-          { t:'Meditação de abertura ao merecimento', file:'Meditacao_de_abertura_ao_merecimento.mp3', date:'2026-09-07T22:16:00' },
-          { t:'Os oito Portais do Merecimento', file:'AA_-_8_Portais_M4.pdf', date:'2026-09-07T22:16:00' }
-        ]},
-        { label:'Módulo 5 — Magnetismo e abertura a receber', lessons:[
-          { t:'Transmissão divina', video:'ab4fd4425df58270b288002094d3ec03f743525a' },
-          { t:'Download áudio', file:'Sessao_5_audio.mp3', date:'2026-09-07T22:16:00' },
-          { t:'Os dez passos da Arte de Receber', file:'AA_-_10_Passos_da_Arte_de_Receber.pdf', date:'2026-09-07T22:16:00' },
-          { t:'Hot Date com o Dinheiro', file:'AA_-_Hot_Date_com_o_Dinheiro.pdf', date:'2026-09-07T22:16:00' },
-          { t:'Meditação de abertura a receber', file:'Meditacao_5.mp3', date:'2026-09-07T22:17:00' }
-        ]},
-        { label:'Módulo 6 — Riqueza quântica e colapsar o tempo', lessons:[
-          { t:'Transmissão divina', video:'6605b3e9099f87a64f4b3d7e279a4c3eecd7accc' },
-          { t:'Download áudio', file:'Sessao_6_audio.m4a', date:'2026-09-07T22:17:00' },
-          { t:'Meditação Quântica', file:'Meditacao_quantica.m4a', date:'2026-09-07T22:17:00' },
-          { t:'Viver o Salto Quântico e Colapsar o Tempo & Como criar o Salto Quântico', file:'Como_viver_o_salto_qu_ntico_e_colapsar_o_tempo.pdf', date:'2026-09-07T22:17:00' }
-        ]},
-        { label:'Módulo 7 — Aura milionária', lessons:[
-          { t:'Transmissão divina', video:'e5b5c9dd91affa4b58d3e4bb6847582f08576577' },
-          { t:'Download áudio', file:'Sessao_7_audio.mp3', date:'2026-09-07T22:18:00' },
-          { t:'Meditação de ativação da aura milionária', file:'Meditacao_7.m4a', date:'2026-09-07T22:18:00' }
-        ]},
-        { label:'Q&A e Integração da expansão', lessons:[
-          { t:'Transmissão divina', video:'88e6137a463bf9287969b273d8eb62e05275c85e' },
-          { t:'Download áudio', file:'Sessao_Q_A_audio.mp3', date:'2026-09-07T22:18:00' }
-        ]}
-      ]},
-      { label:'Sacred Sales', modules:[
-        { label:'Módulo 1 — Negócio icónico e a arte das vendas', lessons:[ { t:'Transmissão divina', video:'24af3929a7541f685f94a852e8db9d4fb7c9e9db' }, { t:'Download áudio' } ]},
-        { label:'Módulo 2 — Alinhamento da oferta & Product suite', lessons:[ { t:'Transmissão divina', video:'fcdeb466f7a85284b23c5b7b91350c40ea01559c' }, { t:'Download áudio' }, { t:'Como articulares o teu produto/serviço para o mundo' }, { t:'Estratégias de Product Suite' } ]},
-        { label:'Módulo 3 — Clientes alma gémea que voltam a investir em ti', lessons:[ { t:'Transmissão divina', video:'cf62bc330981b7adce3a7ca130066103655063fe' }, { t:'Download áudio' }, { t:'Perguntas de conexão com clientes alma gémea' } ]},
-        { label:'Módulo 4 — Vender é um processo íntimo', lessons:[ { t:'Transmissão divina', video:'b1a477250baacab9e0ee59b671946ffaefd3e494' }, { t:'Download áudio' }, { t:'Dissolver objeções pedindo consentimento' }, { t:'Sales calls' } ]},
-        { label:'Módulo 5 — Vender e servir nos vários níveis', lessons:[ { t:'Transmissão divina', video:'2c6015456546ae8b788a552bffe666c9e9249760' }, { t:'Download áudio' }, { t:'Método de vendas/lançamento para cada nível' }, { t:'Método de alinhamento de pricing' } ]},
-        { label:'Módulo 6 — Vender no feminino: leveza, prazer, magnetismo', lessons:[ { t:'Transmissão divina', video:'e8c43b9996e9e3160f2543ea9804a6a7ee185a39' }, { t:'Download áudio' }, { t:'Lançamentos femininos — A energia das vendas' }, { t:'Journaling de Manifestação para vendas no feminino' } ]},
-        { label:'Módulo 7 — Faturação multiplicada e expansão de riqueza', lessons:[ { t:'Transmissão divina', video:'b5b61855538b98caa50f137cd8f32fad2a9e71cf' }, { t:'Download áudio' } ]},
-        { label:'Q&A e Integração da expansão', lessons:[ { t:'Transmissão divina', video:'d7cc4a0614452dab57646aabe4682c81e4e534d8' }, { t:'Download áudio' } ]}
-      ]}
-    ]},
-    { key:'lfd', name:'Líderes Femininas Divinas', note:'14 módulos + masterclasses + Q&A + sessões com convidadas.', downloadDate:'2026-09-07T22:20:00', publishDate:'2023-02-28', cover:'https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/file-uploads/site/2147572331/products/17feded-7a00-256-feb1-3c644bc8011f_Capas_produtos.png', sections:[
-      { label:'Módulos', modules:[
-        { label:'Módulo 1 — A tua alma é a estratégia', lessons:[
-          { t:'Transmissão divina', video:'82cea0ef225a1f0278314d562d6a0fb57ad9adf2' },
-          { t:'Download áudio', file:"LFD_-_udio_M_dulo_1.m4a", date:'2026-09-07T22:20:00' },
-          { t:'Download documento módulo', file:"LFD_-_M_dulo_1_-_A_tua_alma_a_tua_estrat_gia.pdf", date:'2026-09-07T22:20:00' }
-        ]},
-        { label:'Módulo 2 — A tua voz é o teu super poder', lessons:[
-          { t:'Transmissão divina', video:'91a0d2461063d996accfd7e1fb2b9294932a7988' },
-          { t:'Download áudio', file:"Audio_M2_-_A_tua_voz_o_teu_super_poder.m4a", date:'2026-09-07T22:20:00' },
-          { t:'Download documento módulo', file:"LFD_-_M2_A_tua_voz_o_teu_super_poder.pdf", date:'2026-09-07T22:20:00' },
-          { t:'Ritual de desbloqueio do chakra da garganta — Vídeo', video:'ac8d78b58b5b23e2b580958f74883f382fb8d26c' },
-          { t:'Ritual de desbloqueio do chakra da garganta — Download áudio', file:"LFD_M2_ritual_audio.mp3", date:'2026-09-07T22:21:00' },
-          { t:'Ritual de desbloqueio do chakra da garganta — Suporte escrito', file:"LFD_-_Ritual_de_desbloqueio_do_chakra_da_garganta.pdf", date:'2026-09-07T22:21:00' }
-        ]},
-        { label:'Módulo 3 — Os canais da tua mensagem', lessons:[
-          { t:'Transmissão divina', video:'30aaba2a798957586f62a5d2d5608aae7da38780' },
-          { t:'Download áudio', file:"Audio_M3_-_Os_canais_da_tua_mensagem.m4a", date:'2026-09-07T22:21:00' },
-          { t:'Download documento módulo', file:"LFD_-_M3_Os_canais_da_tua_mensagem.pdf", date:'2026-09-07T22:21:00' }
-        ]},
-        { label:'Módulo 4 — Magnetiza os teus clientes alma gémea', lessons:[
-          { t:'Transmissão divina', video:'829c9c4b0a47ec1ff2c31c42df1e69b073eb9f4d' },
-          { t:'Download áudio', file:"LFD_audio_M4.m4a", date:'2026-09-07T22:22:00' },
-          { t:'Download documento módulo', file:"LFD_M4_Magnetiza_os_teus_clientes_alma_g_mea.pdf", date:'2026-09-07T22:22:00' },
-          { t:'Ritual de conexão com os teus clientes alma gémea — Suporte escrito', file:"Ritual_de_conex_o_com_os_teus_clientes_alma_g_mea.pdf", date:'2026-09-07T22:22:00' }
-        ]},
-        { label:'Módulo 5 — Cria conteúdo único e redes sociais mágicas', lessons:[
-          { t:'Transmissão divina', video:'8a6cdbc7068bea10299a700b80960058641aaad3' },
-          { t:'Download áudio', file:"audio1608664952.m4a", date:'2026-09-07T22:22:00' },
-          { t:'Download documento módulo', file:"M5_Cria_conteudo_unico_e_torna_as_tuas_redes_sociais_magicas.pdf", date:'2026-09-07T22:22:00' }
-        ]},
-        { label:'Módulo 6 — Stories magnéticos', lessons:[
-          { t:'Transmissão divina', video:'c1cf30cb076e5d6c2e0ccc609b2213e558ed2d3e' },
-          { t:'Download áudio', file:"LFD_audio_M6.m4a", date:'2026-09-07T22:22:00' },
-          { t:'Download documento módulo', file:"M6_Stories_magn_ticos_a_arte_de_magnetizar_clientes_atrav_s_dos_stories_do_Instagram.pdf", date:'2026-09-07T22:22:00' }
-        ]},
-        { label:'Módulo 7 — Produtos e serviços como extensão da tua alma', lessons:[
-          { t:'Transmissão divina', video:'b233ce112013bd185c3601bba5c9b8108a6db4da' },
-          { t:'Download áudio', file:"LFD_M7_audio.m4a", date:'2026-09-07T22:23:00' },
-          { t:'Download documento módulo', file:"M7_Produtos_e_servicos_como_extensao_da_tua_alma.pdf", date:'2026-09-07T22:23:00' }
-        ]},
-        { label:'Módulo 8 — Storytelling', lessons:[
-          { t:'Transmissão divina', video:'0ae24814487b6d308984cbf79be3ec8c9a87ab20' },
-          { t:'Download áudio', file:"LFD_M8_Audio.m4a", date:'2026-09-07T22:23:00' },
-          { t:'Download documento módulo', file:"M8_Storytelling_a_arte_de_contar_hist_rias_para_passar_uma_mensagem_e_vender.pdf", date:'2026-09-07T22:23:00' }
-        ]},
-        { label:'Módulo 9 — O dinheiro é uma energia divina', lessons:[
-          { t:'Transmissão divina', video:'e8b7528f5e5859c7aae7b97936e1d55b05b8722d' },
-          { t:'Download áudio', file:"LFD_M9_Audio.m4a", date:'2026-09-07T22:23:00' },
-          { t:'Download documento módulo', file:"M9_O_dinheiro_e_uma_energia_divina.pdf", date:'2026-09-07T22:23:00' }
-        ]},
-        { label:'Módulo 10 — Apaixona-te por vendas', lessons:[
-          { t:'Transmissão divina', video:'3a56b47206d1e889146853398a2358da94954cf0' },
-          { t:'Download áudio', file:"audio1554736058.m4a", date:'2026-09-07T22:23:00' },
-          { t:'Download documento módulo', file:"M10_Apaixona-te_por_vendas_.pdf", date:'2026-09-07T22:23:00' }
-        ]},
-        { label:'Módulo 11 — Lança a tua magia para o mundo', lessons:[
-          { t:'Transmissão divina', video:'1a6ab4d3cf7d1f6ebfd8ab0994d8f1aa2b7215c1' },
-          { t:'Download áudio', file:"audio1899945969.m4a", date:'2026-09-07T22:23:00' },
-          { t:'Download documento módulo', file:"M11_Lanca_a_tua_magia_para_o_mundo.pdf", date:'2026-09-07T22:24:00' }
-        ]},
-        { label:'Módulo 12 — Manifestar e liderar uma equipa de sonho', lessons:[
-          { t:'Transmissão divina', video:'23a97dcc3d044cab368951a2df9948b35c76b4db' },
-          { t:'Download áudio', file:"LFD_M12_audio.m4a", date:'2026-09-07T22:24:00' },
-          { t:'Download documento módulo', file:"M12_Manifestar_e_liderar_uma_equipa_de_sonho.pdf", date:'2026-09-07T22:24:00' }
-        ]},
-        { label:'Módulo 13 — A arte da liderança feminina divina', lessons:[
-          { t:'Transmissão divina', video:'4903e4f3e37852de9ac933d8ba302ba18fe5b431' },
-          { t:'Download áudio', file:"LFD_M13_audio.m4a", date:'2026-09-07T22:24:00' },
-          { t:'Download documento módulo', file:"M13_A_arte_da_lideran_a_feminina.pdf", date:'2026-09-07T22:24:00' }
-        ]},
-        { label:'Módulo 14 — Morrer e renascer como empreendedora', lessons:[
-          { t:'Transmissão divina', video:'0bcdbc17546b9e0f1740ed8b5ccc80a40bb67b67' },
-          { t:'Download áudio', file:"LFD_audio_M14.m4a", date:'2026-09-07T22:24:00' },
-          { t:'Download documento módulo', file:"M14_Transmiss_o_surpresa_-_Morrer_e_renascer_como_empreendedora_Seres_vista_em_cada_nova_fase.pdf", date:'2026-09-07T22:24:00' }
-        ]}
-      ]},
-      { label:'Masterclasses especiais extra', modules:[
-        { label:'Canaliza mensagens do divino', lessons:[
-          { t:'Transmissão divina', video:'36530ba4dc284ff190a9bdc63b3263f98936ab31' },
-          { t:'Download áudio', file:"LFD_ME1_audio.mp3", date:'2026-09-07T22:25:00' },
-          { t:'Download documento masterclass', file:"LFD_-_Masterclass_Canaliza_mensagens_do_Divino.pdf", date:'2026-09-07T22:25:00' }
-        ]},
-        { label:'Prática Alquimia da Sombra', lessons:[
-          { t:'Vídeo', video:'5d885bcbe564b4a8b6a2da576b88eb5da6e69e02' },
-          { t:'Journaling', file:"LFD_-_Pr_tica_Alquimia_da_Sombra_Journaling.pdf", date:'2026-09-07T22:25:00' },
-          { t:'Download áudio', file:"Alquimia_da_sombra_audio.mp3", date:'2026-09-07T22:26:00' }
-        ]},
-        { label:'Curar a ferida da irmã', lessons:[
-          { t:'Transmissão divina', video:'b8fc59bd1391c76dd0746638e9b44f604a3c229b' },
-          { t:'Download áudio', file:"Masterclass_Curar_a_ferida_da_irma.m4a", date:'2026-09-07T22:26:00' },
-          { t:'Download documento masterclass', file:"Documento_Masterclass_Curar_a_ferida_da_irma.pdf", date:'2026-09-07T22:26:00' },
-          { t:'Meditação de cura da ferida da irmã', file:"Medita_o_cura.mp3", date:'2026-09-07T22:26:00' }
-        ]},
-        { label:'CEO feminina de dia & mulher à noite', lessons:[
-          { t:'Transmissão divina', video:'bcf4d1c06a847304ee54cc02248096721ef8f44e' },
-          { t:'Download áudio', file:"Masterclass_CEO_Mulher_audio.m4a", date:'2026-09-07T22:27:00' },
-          { t:'Download documento masterclass', file:"LFD_-_Masterclass_CEO_feminina_de_dia_mulher_noite.pdf", date:'2026-09-07T22:27:00' }
-        ]},
-        { label:'Confiança divina', lessons:[
-          { t:'Transmissão divina', video:'e4eb784d89397ad0229bc66c6116f933df38a7d3' },
-          { t:'Download áudio', file:"ConfiancaDivina_audio.m4a", date:'2026-09-07T22:27:00' },
-          { t:'Download documento masterclass', file:"LFD_Masterclass_Confian_a_divina.pdf", date:'2026-09-07T22:27:00' },
-          { t:'Meditação de libertação de medos', file:"LFD_Meditacao_Libertacao_de_medos.mp3", date:'2026-09-07T22:27:00' }
-        ]},
-        { label:'Canalizar, escrever e publicar o teu livro bestseller', lessons:[
-          { t:'Transmissão divina', video:'1e655da9bc4c7a462e5254364a1768509e0eac70' },
-          { t:'Download áudio', file:"LFD_audio_Masterclass_Canalizar_escrever_e_publicar_o_teu_livro_bestseller.m4a", date:'2026-09-07T22:27:00' },
-          { t:'Download documento masterclass', file:"LFD_Masterclass_Canalizar_escrever_e_publicar_o_teu_livro_bestseller.pdf", date:'2026-09-07T22:27:00' }
-        ]},
-        { label:'A energia feminina e masculina de um negócio milionário', lessons:[
-          { t:'Transmissão divina' },
-          { t:'Download áudio', file:"LFD_Audio_Masterclass_A_energia_feminina_e_masculina_de_um_neg_cio_milion_rio.m4a", date:'2026-09-07T22:28:00' },
-          { t:'Download documento masterclass', file:"LFD_Masterclass_A_energia_feminina_e_masculina_de_um_neg_cio_milion_rio.pdf", date:'2026-09-07T22:28:00' }
-        ]}
-      ]},
-      { label:'Sessões de Q&A', modules:[
-        { label:'Q&A Sessão 1 — 28/03/2023', lessons:[ { t:'Gravação', video:'38ba9f3abf76074da46e0fe31285e1a461fdc721' }, { t:'Download áudio', file:"LFD_-_Audio_Sessao_Q_A.m4a", date:'2026-09-07T22:28:00' } ]},
-        { label:'Q&A Sessão 2 — 26/04/2023', lessons:[ { t:'Gravação', video:'2a28c0ed1ccf7f71a27b35fdc027954852647289' }, { t:'Download áudio', file:"LFD_-_Audio_Sessao_Q_A (1).m4a", date:'2026-09-07T22:28:00' } ]},
-        { label:'Q&A Sessão 3 — 30/05/2023', lessons:[ { t:'Gravação', video:'981720392b978a5a81ccbfdfbe8dc8ade9245178' }, { t:'Download áudio', file:"LFD_audio_sessao_Q_A_3.m4a", date:'2026-09-07T22:28:00' }, { t:'Download documento de suporte' } ]},
-        { label:'Q&A Sessão 4 — 28/06/2023', lessons:[ { t:'Gravação', video:'42593feb0af42a19f732a02a15515c302c6a3389' }, { t:'Download áudio', file:"QA_junho_audio.m4a", date:'2026-09-07T22:29:00' } ]},
-        { label:'Q&A Sessão 5 — 02/08/2023', lessons:[ { t:'Gravação', video:'833d8b786de5d59b43731fa52f374f4f57d27c5e' }, { t:'Download áudio', file:"LFD_audio_sessao_QA_5.m4a", date:'2026-09-07T22:29:00' } ]},
-        { label:'Q&A Sessão 6 — 16/08/2023', lessons:[ { t:'Gravação', video:'76f8d2818ee5f27db0973df1918e7028204a76e3' }, { t:'Download áudio', file:"LFD_audio_sessao_QA_6.m4a", date:'2026-09-07T22:29:00' } ]},
-        { label:'Q&A Sessão 7 — 06/09/2023', lessons:[ { t:'Gravação', video:'a7d54691b980fd8d93112318d9604fc7b30e5c6e' }, { t:'Download áudio', file:"LFD_audio_sessao_QA_7.m4a", date:'2026-09-07T22:30:00' } ]},
-        { label:'Q&A Sessão 8 — 11/10/2023', lessons:[ { t:'Gravação', video:'26ddd642658dd5405986ecf292ef9aaf8bf85d53' }, { t:'Download áudio', file:"QA_Sessao8.m4a", date:'2026-09-07T22:29:00' } ]},
-        { label:'Q&A Sessão 9 — 15/11/2023', lessons:[ { t:'Gravação', video:'8c811f0e3ac55c7a38f684c1fd80943e524f6ea4' }, { t:'Download áudio', file:"QA_Sessao9_audio.m4a", date:'2026-09-07T22:30:00' } ]},
-        { label:'Q&A Sessão 10 — 10/01/2024', lessons:[ { t:'Gravação', video:'e62ea8a9a3feee1997d2d25ec8edeac414681a7d' }, { t:'Download áudio' } ]},
-        { label:'Sessão de Conexão com 2023 & Intenções para 2024', lessons:[ { t:'Transmissão divina', video:'baecc21b02f2096b84d9d1cf3aff0483aa2f408d' }, { t:'Download áudio' } ]}
-      ]},
-      { label:'Sessões com convidadas especiais', modules:[
-        { label:'Como criar um site — Margarida Salvado', lessons:[ { t:'Gravação', video:'a70cc8bd10b0f188187f61c7b3392c781a9187df' }, { t:'Download áudio', file:"Audio_Como_criar_um_site_-_por_Margarida_Salvado.m4a", date:'2026-09-07T22:30:00' } ]},
-        { label:'Abrir atividade e obrigações fiscais — Joana Antunes', lessons:[ { t:'Gravação', video:'c484615ddf09d8c4918790416213df10eddf0c47' }, { t:'Download áudio', file:"Audio_Abrir_atividade_e_obriga_es_fiscais_-_Por_Joana_Antunes.m4a", date:'2026-09-07T22:30:00' } ]},
-        { label:'Como escrever e publicar um livro — Ana Viegas', lessons:[ { t:'Gravação', video:'c755452bc6fb690ff8e12513ae4a1e270f45bfb0' }, { t:'Download áudio', file:"Audio_Como_escrever_e_publicar_um_livro_de_sucesso_-_Por_Ana_Viegas.m4a", date:'2026-09-07T22:30:00' } ]}
-      ]},
-      { label:'Bónus especiais', modules:[
-        { label:'Bónus', lessons:[
-          { t:'Manifesto LFD', file:"Manifesto_LFD.png", date:'2026-09-07T22:30:00' },
-          { t:'Meditação de Alinhamento à Abundância', file:"Medita_o_Abund_ncia.mp3", date:'2026-09-07T22:30:00' }
-        ]}
-      ]}
-    ]},
-    { key:'mm', name:'Mulheres Magnéticas', note:'Método quântico de manifestação, 4 módulos + Jornada de Cura.', downloadDate:'2026-09-07T22:36:00', publishDate:'2024-01-09', cover:'https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/file-uploads/site/2147572331/products/aedd387-8ab6-456f-a6d-570d16810a4_Capas_produtos_1_.jpg', sections:[
-      { label:'Bem-vinda', modules:[
-        { label:'Introdução', lessons:[
-          { t:'Ritual de preparação', file:"Mulheres_Magneticas_-_Ritual_prepara_o.pdf", date:'2026-09-07T22:36:00' },
-          { t:'Meditação Manifesta a vida dos teus sonhos', file:"Manifesta_a_vida_dos_teus_sonhos.mp3", date:'2026-09-07T22:36:00' }
-        ]}
-      ]},
-      { label:'Mulheres Magnéticas', modules:[
-        { label:'Módulo 1 — Método quântico de manifestação', lessons:[
-          { t:'Transmissão divina', video:'9a509af28d31dc2be4c078f90e2bd7fa51e84247' },
-          { t:'Download áudio', file:"MMAG_M1_audio.m4a", date:'2026-09-07T22:36:00' },
-          { t:'Método de Manifestação com Journaling', file:"MM24_M1_M_todo_de_Manifesta_o_com_Journaling.pdf", date:'2026-09-07T22:36:00' },
-          { t:'Exercício Mulheres Magnéticas Módulo 1', file:"MM24_M1_Exerc_cio_M1.pdf", date:'2026-09-07T22:36:00' }
-        ]},
-        { label:'Módulo 2 — Abertura ao magnetismo feminino', lessons:[
-          { t:'Transmissão divina', video:'5ea33b2d132e950e8e708eadbd0625000125ce8c' },
-          { t:'Download áudio', file:"MMAG_M2_AUDIO.m4a", date:'2026-09-07T22:36:00' },
-          { t:'Escala de orientação emocional de Abraham-Hicks', file:"MM24_M2_Escala_de_orienta_o_emocional_de_Abraham-Hicks.pdf", date:'2026-09-07T22:36:00' },
-          { t:'Exercício Mulheres Magnéticas Módulo 2', file:"MM24_M2_Exerc_cios_M2.pdf", date:'2026-09-07T22:36:00' }
-        ]},
-        { label:'Módulo 3 — O masculino e o feminino da manifestação', lessons:[
-          { t:'Transmissão divina', video:'ddcba440b8c6a59b3aa6bc49aa60801a182209a5' },
-          { t:'Download áudio', file:"MMAG_M3_AUDIO.m4a", date:'2026-09-07T22:36:00' },
-          { t:'Manifestação orgásmica', file:"MM24_M3_Manifestac_a_o_orga_smica.pdf", date:'2026-09-07T22:36:00' }
-        ]},
-        { label:'Módulo 4 — Match energético com o Universo', lessons:[
-          { t:'Transmissão divina', video:'cbe9bd61ce496a494120c92ea850ef596cf9994f' },
-          { t:'Download áudio', file:"MMAG_M4_AUDIO.m4a", date:'2026-09-07T22:36:00' },
-          { t:'O mantra que mudou a minha vida', file:"MM24_M4_Mantra.pdf", date:'2026-09-07T22:36:00' }
-        ]},
-        { label:'Jornada de Cura & Libertação', lessons:[
-          { t:'Transmissão divina', video:'305021b786aeed7309ee1545359dad3df043f0d5' },
-          { t:'Download áudio', file:"MMAG_JCL_AUDIO.m4a", date:'2026-09-07T22:37:00' },
-          { t:'Journaling compreender os bloqueios da manifestação', file:"MM24Jornada_Journaling_compreender_os_bloqueios_da_manifestac_a_o.pdf", date:'2026-09-07T22:37:00' },
-          { t:'Alquimia da manifestação', file:"MM24JornadaAlquimia_da_manifestac_a_o.pdf", date:'2026-09-07T22:37:00' },
-          { t:'Manifesta o amor da tua vida', file:"MM24JornadaManifesta_o_amor_da_tua_vida.pdf", date:'2026-09-07T22:37:00' }
-        ]}
-      ]},
-      { label:'Apoio de utilização', modules:[
-        { label:'Apoio', lessons:[ { t:'Apoio de utilização' } ]}
-      ]}
-    ]},
-    { key:'mmd', name:'Mulher Multidimensional', note:'5 módulos.', downloadDate:'2026-09-07T22:38:00', publishDate:'2024-01-29', cover:'https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/file-uploads/site/2147572331/products/bb0bc65-2fd2-268d-7436-2240f41aa67_Capas_produtos_2_.jpg', sections:[
-      { label:'Módulos', modules:[
-        { label:'Módulo 1', lessons:[ { t:'Transmissão divina', video:'c33f433aaa169f5a88aa0e252b20a32421bd2c59', file:"MMulti_Modulo_1.m4a", date:'2026-09-07T22:38:00' } ]},
-        { label:'Módulo 2', lessons:[ { t:'Transmissão divina', video:'2f1f0f72b5cf1367c772125d31b350cd9aa840f5', file:"MMulti_Mo_dulo_2.m4a", date:'2026-09-07T22:38:00' } ]},
-        { label:'Módulo 3', lessons:[ { t:'Transmissão divina', video:'65968bfeab270228e23d3c9230ba8f14e22e230d', file:"MMulti_Modulo3_audio.m4a", date:'2026-09-07T22:38:00' } ]},
-        { label:'Módulo 4', lessons:[ { t:'Transmissão divina', video:'8424cf5719da7b43af0932ffe2fe27b1dee53a32', file:"MMulti_Mo_dulo_4_.m4a", date:'2026-09-07T22:39:00' } ]},
-        { label:'Módulo 5', lessons:[ { t:'Transmissão divina', video:'abc7e4d8170cda6b4de465d2005f3c313d9f467f', file:"MMulti_Mo_dulo_5_.m4a", date:'2026-09-07T22:39:00' } ]}
-      ]},
-      { label:'Bónus', modules:[
-        { label:'Meditação', lessons:[ { t:'Manifesta a vida dos teus sonhos', file:"Manifesta_a_vida_dos_teus_sonhos.mp3", date:'2026-09-07T22:38:00' } ] }
-      ]}
-    ]},
-    { key:'llsb', name:'The Love, Life, Sex & Biz', note:'LOVE + LIFE + SEX + BIZ + Extras.', downloadDate:'2026-09-07T22:40:00', publishDate:'2024-05-25', cover:'https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/file-uploads/sites/2147572331/images/18140a-8e1-0d00-d73d-c5a48d4445ef_Cover_news_besties_date_MM.png', sections:[
-      { label:'Todas as aulas em vídeo', modules:[
-        { label:'LOVE', lessons:[
-          { t:'Date Like a Queen', file:"QueenClass_DateLikeaQueen.m4a", date:'2026-09-07T22:40:00' },
-          { t:'Q&A — Queen of Love Integration & What Men Want', file:"audio1107576894.m4a", date:'2026-09-07T22:40:00' },
-          { t:'The Love Immersion — Parte 1', video:'a341135e6ba2803919b056d3c4f4bbf3b908df00', file:"The_Love_Immersion.m4a", date:'2026-09-07T22:40:00' },
-          { t:'The Love Immersion — Parte 2', video:'251d3886e6480e7204684f3abee5eeb7bc36bb08', file:"The_Love_Immersion (1).m4a", date:'2026-09-07T22:40:00' },
-          { t:'The Love Immersion — Parte 3', video:'6a07a6023ae95885f8b9846d6290fa69356783f2', file:"The_Love_Immersion (2).m4a", date:'2026-09-07T22:40:00' },
-          { t:'Queen Class: Become his Lover', video:'7450411f78f40ff17bcfb8e60d54f933677e5575' },
-          { t:'Hot Romance', video:'403b7fd90276a7473609247bc252b2ef9950cd80' },
-          { t:'Priestess Ritual — Abril', file:"PriestessRitual_abril.m4a", date:'2026-09-07T22:40:00' }
-        ]},
-        { label:'Queen Class mensais', lessons:[
-          { t:'Queen Class — Abril', file:"QueenClassAbr.mp3", date:'2026-09-07T22:41:00' },
-          { t:'Queen Class — Junho', file:"QueenClassJunho.m4a", date:'2026-09-07T22:42:00' },
-          { t:'Queen Class — Julho', file:"QueenClass_Julho.m4a", date:'2026-09-07T22:46:00' }
-        ]},
-        { label:'LIFE', lessons:[
-          { t:'The End of an Era', video:'baa8165eef46f124e256f5ff1f79466222fb14f2' },
-          { t:'Queen Class — A Life Written Like a Romance', video:'26d93ed24d87f6beea8429e8484d7410cd633fc2' },
-          { t:'Queen Class — Miracle Mindset', video:'5a114bae59957578562a5e9cf8ea9e1272c445eb', file:"MM.mp3", date:'2026-09-07T22:45:00' },
-          { t:'Queen Class — Be the Manifestation Queen', video:'f3fca7086a803c1cce63a8c7fceee868c5bbe533', file:"Manifestation_Queen_Identity.png", date:'2026-09-07T22:42:00' },
-          { t:'Queen Class — Divine Devotion', video:'6027d620265dff6d3a75835b51e043761bcb4be4' },
-          { t:'Queen Class — Divine Devotion Parte 2', video:'e007788ba9968f8ca8ae08793f802e2d536a1cda' },
-          { t:'Queen Class — Desire Queen', video:'d9e058b906692158e80e0bd79a0bb804c2cae09b' },
-          { t:'Queen Class — Quantum Queen', video:'4c212f3d5574d04162e54ec923281b773f4958c2', file:"Quantum_Queen.mp3", date:'2026-09-07T22:43:00' },
-          { t:'Queen Class — Channeling Queen', video:'b0db4f1affaa2b09f682b9da7b958585177e6eb7', file:"QueenClass_Channeling.mp3", date:'2026-09-07T22:44:00' },
-          { t:'Queen Class — #HERyear', video:'b821c52d2b601dca31cef9b75935c17187411efe', file:"Besties_Date_-_HERyear.pdf", date:'2026-09-07T22:43:00' }
-        ]},
-        { label:'SEX', lessons:[
-          { t:'The S€x Immersion — Parte 1', video:'2ffccf298044034ebd8e58e449f623cc391f5aa1', file:"TSIAudio.mp3", date:'2026-09-07T22:44:00' },
-          { t:'The S€x Immersion — Parte 2', video:'b5a90d166d25efcb7d8bf37ca070375b666ee5cc', file:"TSIAudio (1).mp3", date:'2026-09-07T22:44:00' },
-          { t:'S€x Goddess — Queen Class Parte 1', video:'1e9ccaefb6d4223505e2701391ba23917e39830d' },
-          { t:'S€x Goddess — Queen Class Parte 2', video:'a68541ceff80ee00375167d1ad098bef5783ffbe' },
-          { t:'Money & Orgasms — Queen Class', video:'22b16bcad93c5350e40a67b40c885105ac265b41' },
-          { t:'Lover in Bed — Queen Class', video:'4d4e9de8bcbba91b160d8aaa33bd52f47e0bdd96' }
-        ]},
-        { label:'BIZ', lessons:[
-          { t:'Wealthy Woman — Queen Class', video:'314463db3ebd08f2d8ef7374938b413911fbf879' },
-          { t:'Watch Me World — Queen Class', video:'c8cade0a2f81ca5bd14e16f44210ad76a1899f11' },
-          { t:'Meditação (Watch Me World)', video:'2999068738cbd7787c772a71ce9d5eded4394a66' },
-          { t:'Biz Queen Upgrade — Parte 1', video:'b01838564693dd197091ea88ab54f6eddff70555' },
-          { t:'Biz Queen Upgrade — Parte 2', video:'5d57c2535963c5d5b029207b3f847159dbb1a98b' },
-          { t:'Lover in Business — Flirt to Sell (Parte 1)', video:'bc7a0d380d9dfc1ab8d1a925db7d03c8117d2548' },
-          { t:'Lover in Business — Flirt to Sell (Parte 2)', video:'27f66f2916cf0a0e212ba283af67a1b39c039f06' },
-          { t:'Aula Bónus — Your Next BIG Idea Parte 1 (áudio)', file:"YourNextBigIdea.mp3", date:'2026-09-07T22:46:00' },
-          { t:'Aula Bónus — Your Next BIG Idea Parte 1 (PDF)', file:"Your_Next_BIG_Idea.pdf", date:'2026-09-07T22:46:00' },
-          { t:'Aula Bónus — Your Next BIG Idea Parte 2 (áudio)', file:"YourNextBigIdea (1).mp3", date:'2026-09-07T22:46:00' },
-          { t:'Aula Bónus — Your Next BIG Idea Parte 2 (PDF)', file:"Your_Next_BIG_Idea (1).pdf", date:'2026-09-07T22:46:00' },
-          { t:'Aula Bónus — Your Next BIG Idea Parte 3 (áudio)', file:"YourNextBigIdea (2).mp3", date:'2026-09-07T22:46:00' },
-          { t:'Aula Bónus — Your Next BIG Idea Parte 3 (PDF)', file:"Your_Next_BIG_Idea (2).pdf", date:'2026-09-07T22:46:00' },
-          { t:'The Biz Immersion — Parte 1', video:'ecb4fd2d650600f91e5490ed777703b7fb535316' },
-          { t:'Be Seen in Biz — Queen Class Parte 1', video:'49580743fa55ec5ccbc71c4b550181b4a4994635' },
-          { t:'Be Seen in Biz — Queen Class Parte 2', video:'79b7dc534c7fffe952f0f316cd21bc8e8bca48e1' }
-        ]},
-        { label:'EXTRAS', lessons:[
-          { t:'Guest Speaker — Diogo Cardoso', video:'98a87eff2010ff66033b11854ee4e3bd2f0f535f', file:"Diogo.mp3", date:'2026-09-07T22:47:00' },
-          { t:'The Anniversary Party', file:"Party_MM.mp3", date:'2026-09-07T22:47:00' },
-          { t:'Queen of the Month — Ana Paulino', video:'5422c7b03552f2b0659e65d8c3e9a2cacce04564', file:"Ana_PaulinoAudio.mp3", date:'2026-09-07T22:47:00' },
-          { t:'Queen of the Month — Ana Paulino Parte 2', video:'bcebc4209a7fa791dcd18d2fb46143e43895d0c1', file:"Ana_PaulinoAudio (1).mp3", date:'2026-09-07T22:47:00' },
-          { t:'Rita Penteado — The woman who decided to have it all', video:'4e283c00cf4bc16652ada22f7c7b32ebbf7f8241' }
-        ]}
-      ]}
-    ]},
-    { key:'dq', name:'Desire Queen', note:'4 módulos + Besties Date.', downloadDate:'2026-09-07T22:53:00', publishDate:'2025-01-16', cover:'https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/file-uploads/site/2147572331/products/c64085-84c8-5e05-6e07-fa733c6182_Untitled-1.png', sections:[
-      { label:'Módulos', modules:[
-        { label:'Módulo 1 — You are being manifested', lessons:[
-          { t:'Transmissão', video:'311afc4a09fbaf7759c0874d3158a97e76e1572c' },
-          { t:'Download áudio', file:"Modulo1_Audio.mp3", date:'2026-09-07T22:53:00' },
-          { t:'Meditação', video:'02da04189c81f265ed2679ced55155b878cb8327', file:"Meditacao.wav", date:'2026-09-07T22:53:00' }
-        ]},
-        { label:'Módulo 2 — You are the Desire Queen', lessons:[
-          { t:'Transmissão', video:'2bd5e0964aca3c9ba1b3fd54a61d1de44024b9f9', file:"DesireQueen2.mp3", date:'2026-09-07T22:54:00' },
-          { t:'Meditação', video:'e404a77767f32bc5cc29afa167b6c07b0ba1b40b', file:"DesireQueen2Medita_o.mp3", date:'2026-09-07T22:53:00' }
-        ]},
-        { label:'Módulo 3 — Desired by love, clients & money', lessons:[
-          { t:'Parte 1 (Meditação)', video:'e5b5b25e91a3a1e6764f065e3134872a0cf8ec4d' },
-          { t:'Parte 2', video:'a044269ad729dab17b0c205554fd719d0919b885', file:"DQ3_pt2.mp3", date:'2026-09-07T22:54:00' }
-        ]},
-        { label:'Módulo 4 — Desired by miracles & quantum leaps', lessons:[
-          { t:'Transmissão', video:'db061ebab968f43e7eb04471012f9b43671fac75', file:"DQ4.mp3", date:'2026-09-07T22:54:00' }
-        ]},
-        { label:'Besties Date', lessons:[
-          { t:'Besties Date: Desire Queen', video:'9f537117f60cbd3b8222842115a2e89575144aa3' }
-        ]}
-      ]}
-    ]},
-    { key:'mce', name:'Your Main Character Era', note:'2 partes + The Upgraded Class.', downloadDate:'2026-09-07T22:55:00', publishDate:'2025-02-03', cover:'https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/file-uploads/site/2147572331/products/c800627-52ec-1452-d44-067281a8e4c_e5558173-28ba-495f-ad61-a5a03db9a00a.png', sections:[
-      { label:'Aulas', modules:[
-        { label:'Your Main Character Era', lessons:[
-          { t:'Parte 1', video:'7da4773a89e2441bdd3c438ba312b94dbe4a0ac7', file:"YMCE.mp3", date:'2026-09-07T22:55:00' },
-          { t:'Parte 2', video:'fcb18c2f68409c93c1c1ead5c44644fd02144cdc' }
-        ]},
-        { label:'The Upgraded Class', lessons:[
-          { t:'Parte 1', video:'c694ff96242aac99527cfcdfe285ad05ce9d2bc8' },
-          { t:'Parte 2', video:'6b104df1224f610722062bfcb30a7e7b090c954c' }
-        ]}
-      ]}
-    ]},
-    { key:'tdo', name:'The Dream Offer', note:'3 módulos + Mastermind Call.', downloadDate:'2026-09-07T22:56:00', publishDate:'2025-05-21', cover:'https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/file-uploads/site/2147572331/products/74cf716-14c6-4de-26c7-a550fa6b7720_Cover_NEWS_THE_DREAM_OFFER_1_.jpg', sections:[
-      { label:'Módulos', modules:[
-        { label:'Introdução', lessons:[ { t:'Introdução', video:'ce0f4c282da72b99090654f4c88af866c0333bad', file:"The_Dream_Offer_Intro.mp3", date:'2026-09-07T22:56:00' } ]},
-        { label:'Módulo 1 — The alignment & creatrix codes', lessons:[ { t:'Transmissão', video:'8bf2a8db82f42e967df2f3bef267671a66f095e8', file:"The_Dream_Offer_M_dulo_1.mp3", date:'2026-09-07T22:56:00' } ]},
-        { label:'Módulo 2 — The sales seduction & desire that never ends', lessons:[ { t:'Transmissão', video:'6702838bf63e5d49940bdb2b95744a8f2eaed4a6', file:"The_Dream_Offer_M_dulo_2.mp3", date:'2026-09-07T22:56:00' } ]},
-        { label:'Módulo 3 — The Client Love', lessons:[ { t:'Transmissão', video:'938698910a6d298b5608db4d784e37668b09db99', file:"The_Dream_Offer_M_dulo_3.mp3", date:'2026-09-07T22:56:00' } ]},
-        { label:'Special Mastermind Call', lessons:[ { t:'The Dream Offer — Special Mastermind Call', video:'755cca4c1b766dadc38ecb933c7c6617a0805893', file:"DreamOffer.mp3", date:'2026-09-07T22:56:00' } ]}
-      ]}
-    ]},
-    { key:'ysya', name:'Your Story Your Art', note:'5 módulos + Story Mastery Day.', downloadDate:'2026-09-07T22:59:00', publishDate:'2026-05-28', cover:'https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/file-uploads/sites/2147572331/images/73e4e04-f2e1-d7ef-1e4-c17124ab38b_YSYA_COVER_NEWS.png', sections:[
-      { label:'Módulos', modules:[
-        { label:'Módulo 1: The Lived Story', lessons:[ { t:'Transmissão', video:'27a85711dbe8a9fc11e93e83efaf1d0e476aea91' } ]},
-        { label:'Módulo 2: Embodiment & Invisible Communication', lessons:[ { t:'Transmissão', video:'91fab5c2eea7028020b7852f57aaeaf5ff664508' } ]},
-        { label:'Módulo 3: Story & Narrative Creation', lessons:[ { t:'Transmissão', video:'13a0c911e2a0a8d2a2a633554a87082b2e675ed6', file:"Your_Story_Your_Art_Mo_dulo_3.pdf", date:'2026-09-07T22:59:00' } ]},
-        { label:'Story Mastery Day', lessons:[ { t:'Transmissão', video:'8a9b155fdb693fcd0859086004ca387fb8db8a86', file:"Story_Mastery_Day.pdf", date:'2026-09-07T22:59:00' } ]},
-        { label:'Módulo 4: Irresistible Teasing', lessons:[ { t:'Transmissão', video:'50d2fd84257135eec5793b543ec73854af135d04' } ]},
-        { label:'Módulo 5: Story-led Sales Authority', lessons:[ { t:'Transmissão', video:'8e731ea6a32a5cec706ade1c77e4e0bb2e1d0605', file:"Mo_dulo_5_Histo_rias.pdf", date:'2026-09-07T22:59:00' } ]},
-        { label:'Story Mastery Day — Imersão Extra', lessons:[
-          { t:'Transmissão', video:'411c5d3d802ee45e49d75c8952a40367fca0f88b' },
-          { t:'Todas as histórias', file:"Story_Mastery_Day_Imersa_o_Extra_Todas_as_histo_rias.pdf", date:'2026-09-07T22:59:00' },
-          { t:'Histórias com sozinhos', file:"Story_Mastery_Day_Imersa_o_Extra_Histo_rias_com_sozinhos.pdf", date:'2026-09-07T22:59:00' }
-        ]}
-      ]}
-    ]},
-    { key:'fbs', name:'Femme Biz School', note:'Sessões, imersões e minimind — o que já está desbloqueado (20% do curso).', downloadDate:'2026-09-07T22:49:00', publishDate:'2026-07-08', cover:'https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/file-uploads/site/2147572331/products/87bfcca-60da-8231-e827-c6cec1ec650_f77adc8c-faf3-405c-84f4-64d012524ec0.png', sections:[
-      { label:'Aulas em vídeo', modules:[
-        { label:'Onboarding & Summit', lessons:[
-          { t:'Sessão Onboarding', video:'b123adf991eb390f1e1a15c81b02e7927e41b656' },
-          { t:'Gravação Zoom — Onboarding (1)', file:"Zoom_FBS.mp3", date:'2026-09-07T22:49:00' },
-          { t:'Gravação Zoom — Onboarding (2)', file:"Zoom_FBS (1).mp3", date:'2026-09-07T22:49:00' },
-          { t:'Summit — Dia 1', video:'24e0ab6baf8be997955c209d3c35360efebf273d' },
-          { t:'Summit — Dia 2', video:'e83592cfd52cac1e395099fb7a914196b20597c0' },
-          { t:'Summit — Dia 3', video:'cab64f55138928845fa73dad065793e64c1ec378' },
-          { t:'Summit — Dia 4 Parte 1', video:'306fd6e90c95cd65f74c82098df30b592e47b15b' },
-          { t:'Summit — Dia 4 Parte 2', video:'e66c9a0f9276b2ada5e8659cb63c40afda8e7a0a' }
-        ]},
-        { label:'Femme Vision & Wealthy Woman', lessons:[
-          { t:'Femme Vision — Parte 1 (Meditação)', video:'5e793e0808ca8d3168e3e176d3e025ea79abf7b9' },
-          { t:'Femme Vision — Parte 2', video:'72c894de80fdfe503b6b5bbd0f30496c1284adbc' },
-          { t:'Femme Vision — Parte 3', video:'0c3604dc0fc012f120434c7206cb2f0f549b92c7' },
-          { t:'Wealthy Woman Codes — Parte 1', video:'141f4962f1ab2c66fc6a810ac8bff99c616a23ce' },
-          { t:'Wealthy Woman Codes — Parte 2', video:'f44f39189735aecbd14ea1c08c142a53c571f0e8' }
-        ]},
-        { label:'Vendas & Oferta', lessons:[
-          { t:'Flirt to Sell: Femme Sales Advanced Training', video:'4f35a55cbfe50d06ed8bd9eacf62fee50d4cd4c6' },
-          { t:'Flirt to Sell — The Strategy Edition', video:'f5673ac5a796e5d4fd8e08e35c12dde6bef11791' },
-          { t:'Femme Offer Creatrix — The Immersion', video:'955e605c63a49c5b39d372eb0bcd984a40d844ae' },
-          { t:'Personal Power & Personal Brand — The Immersion', video:'9b76d04df39ea05c506a4df14bbfb58b267223fa' },
-          { t:'Client Devotion', video:'25aee6f4febecc04a8a749e7bfede76973d165ee' }
-        ]},
-        { label:'Redes & Palco', lessons:[
-          { t:'Sexy Socials — Parte 1', video:'8ac9679cb56693753ac491bda0d4fdd13c9212cd' },
-          { t:'Sexy Socials — Parte 2', video:'6aa84136d485a42590215e133bc60b7b4d5af437' },
-          { t:'Behind the Stage — Parte 1', video:'ad44e044726ead4138e01ecb6080744345b49665' },
-          { t:'Behind the Stage — Parte 2', video:'8b614471ed8b43f365a61b8a9b4e07a25f255d6b' }
-        ]},
-        { label:'HER Transmission & Masterpiece', lessons:[
-          { t:'HER Transmission', video:'9f4d7e7b7596bb624f45da14970da9c164c29635' },
-          { t:'HER Transmission Audit', video:'ee6a00fc74d4c2b84375fc7ff497e48337d2feb6' },
-          { t:'Femme Biz Masterpiece Season', video:'541a33c5204fb93b5fb73a5a62a6876f71dc08cd' }
-        ]},
-        { label:'Summer Camp Minimind', lessons:[
-          { t:'Minimind 1', video:'286136e45c8c7cc7801e177d2bcdcc128ab6acf6' },
-          { t:'Minimind 2', video:'1428edc7c0c51434a0be0bbc1e633ea9f34b0408' },
-          { t:'Minimind 3', video:'02b788de5db0d995694200090623ad2ade51b447' },
-          { t:'Minimind 4', video:'ba1988298e5d678858b50e5296ea4b95a0b4e3e3' }
-        ]},
-        { label:'Mentoring & Convidados', lessons:[
-          { t:'Mentoring Group Call — Fevereiro', file:"FBS_Fev.mp3", date:'2026-09-07T22:50:00' },
-          { t:'Mentoring Group Call — Junho', file:"FBS_JUN.mp3", date:'2026-09-07T22:50:00' },
-          { t:'Mentoring Group Call — Abril', video:'a9c56f52ebdd7b7cb8ab324ac24b950aa570a295' },
-          { t:'Mentoring Group Call — Maio', video:'f787cbbb1c20153d7a8648d68dd5ede6b56b7fca' },
-          { t:'Courtney Tidona — Volume Offers', video:'8466230d051e92c1459322f357bc7ef31cf81e6e', file:"Courtney_Tidona.mp3", date:'2026-09-07T22:52:00' },
-          { t:'Madalena Dragon — The Viral Queen Class', video:'de8f943fe91a806427c5de0ae085438a38f652cd' }
-        ]},
-        { label:'Ainda por desbloquear (só documento)', lessons:[
-          { t:'Femme CEO Era — Parte 1', file:"Femme_CEO_Era_-_PDF.pdf", date:'2026-09-07T22:50:00' },
-          { t:'Femme CEO Era — Parte 2', file:"Femme_CEO_Era_-_PDF (1).pdf", date:'2026-09-07T22:51:00' },
-          { t:'Recurso — 100 Sign Ups', file:"100_Sign_Ups.pdf", date:'2026-09-07T22:52:00' }
-        ]}
-      ]}
-    ]},
-  ];
+  var COURSES;
+  var ENC = {"salt": "wvpZZx9ZlHPZLyjnUhuoYQ==", "iv": "/k3aLpeAxIssm/gh", "data": "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", "iterations": 250000};
 
-  var LESSONS = [];
-  COURSES.forEach(function(course){
-    course.sections.forEach(function(section, si){
-      section.modules.forEach(function(mod, mi){
-        mod.id = course.key + '-s' + si + '-m' + mi;
-        mod.lessonIds = [];
-        mod.lessons.forEach(function(lesson, li){
-          var id = mod.id + '-' + li;
-          mod.lessonIds.push(id);
-          LESSONS.push({
-            id:id, title:lesson.t, courseKey:course.key, courseName:course.name,
-            sectionLabel:section.label, moduleId:mod.id, moduleLabel:mod.label,
-            video: lesson.video || null, file: lesson.file || null, fileDate: lesson.date || null
+
+  function initApp(){
+    var LESSONS = [];
+    COURSES.forEach(function(course){
+      course.sections.forEach(function(section, si){
+        section.modules.forEach(function(mod, mi){
+          mod.id = course.key + '-s' + si + '-m' + mi;
+          mod.lessonIds = [];
+          mod.lessons.forEach(function(lesson, li){
+            var id = mod.id + '-' + li;
+            mod.lessonIds.push(id);
+            LESSONS.push({
+              id:id, title:lesson.t, courseKey:course.key, courseName:course.name,
+              sectionLabel:section.label, moduleId:mod.id, moduleLabel:mod.label,
+              video: lesson.video || null, file: lesson.file || null, fileDate: lesson.date || null
+            });
           });
         });
       });
     });
-  });
 
-  var state = {};
-  LESSONS.forEach(function(l){ state[l.id] = { ouvido:false, sentimento:'', nextStep:'', updatedAt:null }; });
+    var state = {};
+    LESSONS.forEach(function(l){ state[l.id] = { ouvido:false, sentimento:'', nextStep:'', updatedAt:null }; });
 
-  var currentFilter = 'todas';
-  var currentSearch = '';
-  var expandedLessons = {};
-  var expandedModules = {};
-  var saveTimers = {};
+    var currentFilter = 'todas';
+    var currentSearch = '';
+    var expandedLessons = {};
+    var expandedModules = {};
+    var saveTimers = {};
 
-  function fmtDate(iso){
-    if(!iso) return '';
-    try{ var d = new Date(iso); return d.toLocaleDateString('pt-PT', { day:'2-digit', month:'short' }); }catch(e){ return ''; }
-  }
-  function fmtDateYear(iso){
-    if(!iso) return '';
-    try{ var d = new Date(iso + 'T12:00:00'); return d.toLocaleDateString('pt-PT', { day:'2-digit', month:'short', year:'numeric' }); }catch(e){ return ''; }
-  }
-  function fmtDateTime(iso){
-    if(!iso) return '';
-    try{
-      var d = new Date(iso);
-      return d.toLocaleDateString('pt-PT', { day:'2-digit', month:'short' }) + ', ' + d.toLocaleTimeString('pt-PT', { hour:'2-digit', minute:'2-digit' });
-    }catch(e){ return ''; }
-  }
-
-  function persistLocal(){
-    try{ localStorage.setItem('escuta-sagrada-state', JSON.stringify(state)); }catch(e){}
-  }
-  function loadLocal(){
-    try{
-      var raw = localStorage.getItem('escuta-sagrada-state');
-      if(raw){
-        var parsed = JSON.parse(raw);
-        Object.keys(parsed).forEach(function(id){ if(state[id]) state[id] = Object.assign(state[id], parsed[id]); });
-      }
-    }catch(e){}
-  }
-
-  function saveLesson(id){ persistLocal(); }
-  function scheduleSave(id){ clearTimeout(saveTimers[id]); saveTimers[id] = setTimeout(function(){ saveLesson(id); }, 500); }
-
-  function toggleOuvido(id){
-    var l = state[id];
-    l.ouvido = !l.ouvido;
-    l.updatedAt = new Date().toISOString();
-    saveLesson(id);
-    render();
-  }
-  function updateField(id, field, value){
-    state[id][field] = value;
-    state[id].updatedAt = new Date().toISOString();
-    scheduleSave(id);
-    renderProgress();
-    renderModuleCounts();
-  }
-
-  function matchesFilter(l){
-    var s = state[l.id];
-    if(currentFilter === 'por-ouvir' && s.ouvido) return false;
-    if(currentFilter === 'ouvidas' && !s.ouvido) return false;
-    if(currentFilter === 'com-video' && !l.video) return false;
-    if(currentFilter === 'com-ficheiro' && !l.file) return false;
-    if(currentSearch){
-      var hay = (l.title + ' ' + l.moduleLabel + ' ' + l.courseName).toLowerCase();
-      if(hay.indexOf(currentSearch.toLowerCase()) === -1) return false;
+    function fmtDate(iso){
+      if(!iso) return '';
+      try{ var d = new Date(iso); return d.toLocaleDateString('pt-PT', { day:'2-digit', month:'short' }); }catch(e){ return ''; }
     }
-    return true;
-  }
+    function fmtDateYear(iso){
+      if(!iso) return '';
+      try{ var d = new Date(iso + 'T12:00:00'); return d.toLocaleDateString('pt-PT', { day:'2-digit', month:'short', year:'numeric' }); }catch(e){ return ''; }
+    }
+    function fmtDateTime(iso){
+      if(!iso) return '';
+      try{
+        var d = new Date(iso);
+        return d.toLocaleDateString('pt-PT', { day:'2-digit', month:'short' }) + ', ' + d.toLocaleTimeString('pt-PT', { hour:'2-digit', minute:'2-digit' });
+      }catch(e){ return ''; }
+    }
 
-  function icon(){ return '<svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'; }
-  function chevron(){ return '<svg class="chevron" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 3.5L11 8L6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'; }
+    function persistLocal(){
+      try{ localStorage.setItem('escuta-sagrada-state', JSON.stringify(state)); }catch(e){}
+    }
+    function loadLocal(){
+      try{
+        var raw = localStorage.getItem('escuta-sagrada-state');
+        if(raw){
+          var parsed = JSON.parse(raw);
+          Object.keys(parsed).forEach(function(id){ if(state[id]) state[id] = Object.assign(state[id], parsed[id]); });
+        }
+      }catch(e){}
+    }
 
-  function renderProgress(){
-    var total = LESSONS.length;
-    var done = LESSONS.filter(function(l){ return state[l.id].ouvido; }).length;
-    var pct = total ? Math.round(done/total*100) : 0;
-    document.querySelector('.aura').style.setProperty('--pct', pct);
-    document.getElementById('auraNum').textContent = pct + '%';
-    document.getElementById('progressDetail').textContent = done + ' de ' + total + ' aulas ouvidas';
-  }
+    function saveLesson(id){ persistLocal(); }
+    function scheduleSave(id){ clearTimeout(saveTimers[id]); saveTimers[id] = setTimeout(function(){ saveLesson(id); }, 500); }
 
-  function renderModuleCounts(){
-    COURSES.forEach(function(course){
-      course.sections.forEach(function(section){
-        section.modules.forEach(function(mod){
-          var el = document.getElementById('count-' + mod.id);
-          if(!el) return;
-          var doneCount = mod.lessonIds.filter(function(id){ return state[id].ouvido; }).length;
-          el.textContent = doneCount + '/' + mod.lessonIds.length;
-          el.parentElement.parentElement.classList.toggle('module-done', doneCount === mod.lessonIds.length);
-        });
-      });
-    });
-  }
-
-  function firstUnfinished(){ return LESSONS.filter(function(l){ return !state[l.id].ouvido; })[0]; }
-
-  function buildLessonEl(l){
-    var s = state[l.id];
-    var wrap = document.createElement('div');
-    wrap.className = 'lesson';
-    wrap.dataset.id = l.id;
-    wrap.dataset.done = s.ouvido ? 'true' : 'false';
-    wrap.dataset.expanded = expandedLessons[l.id] ? 'true' : 'false';
-    var hasNote = !!(s.sentimento || s.nextStep);
-
-    wrap.innerHTML =
-      '<div class="lesson-row">' +
-        '<button class="check" aria-checked="' + s.ouvido + '" aria-label="Marcar como ouvida">' + icon() + '</button>' +
-        '<div class="lesson-main">' +
-          '<div class="lesson-title-row">' +
-            (hasNote ? '<span class="note-dot" title="tem nota"></span>' : '') +
-            '<span class="lesson-title">' + l.title + '</span>' +
-          '</div>' +
-          (s.updatedAt ? '<div class="lesson-meta">atualizado ' + fmtDate(s.updatedAt) + '</div>' : '') +
-          (l.file ? '<div class="file-tag" title="' + l.file + '"><span class="file-tag-label">Ficheiro</span><span class="file-tag-name">' + l.file + '</span><span class="file-tag-date">' + fmtDateTime(l.fileDate) + '</span></div>' : '') +
-          (l.video ? '<div class="video-wrap"><video controls preload="none" playsinline src="https://embed-ssl.wistia.com/deliveries/' + l.video + '.bin"></video></div>' : '') +
-        '</div>' +
-      '</div>' +
-      '<div class="notes">' +
-        '<div><label class="field-label">Como te sentiste</label><textarea data-field="sentimento" placeholder="o que mexeu, o que resistiu, o que abriu...">' + (s.sentimento||'') + '</textarea></div>' +
-        '<div><label class="field-label">Próximo passo — como vais aplicar isto</label><textarea data-field="nextStep" placeholder="uma ação concreta, prática ou decisão">' + (s.nextStep||'') + '</textarea></div>' +
-        '<span class="save-hint">guardado automaticamente neste browser</span>' +
-      '</div>';
-
-    wrap.querySelector('.check').addEventListener('click', function(){ toggleOuvido(l.id); });
-    wrap.querySelector('.lesson-title-row').addEventListener('click', function(){
-      expandedLessons[l.id] = !expandedLessons[l.id];
-      wrap.dataset.expanded = expandedLessons[l.id] ? 'true' : 'false';
-    });
-    wrap.querySelectorAll('textarea').forEach(function(ta){
-      ta.addEventListener('input', function(){ updateField(l.id, ta.dataset.field, ta.value); });
-    });
-    return wrap;
-  }
-
-  function render(){
-    var container = document.getElementById('courses');
-    container.innerHTML = '';
-    var anyVisible = false;
-
-    COURSES.forEach(function(course){
-      var courseLessons = LESSONS.filter(function(l){ return l.courseKey === course.key && matchesFilter(l); });
-      if(courseLessons.length === 0) return;
-      anyVisible = true;
-
-      var courseEl = document.createElement('div');
-      courseEl.className = 'course';
-      courseEl.id = 'course-' + course.key;
-      courseEl.innerHTML =
-        (course.cover ? '<img class="course-cover" src="' + course.cover + '" alt="' + course.name + '">' : '') +
-        '<h2 class="course-title">' + course.name + '</h2><p class="course-note">' + course.note + '</p>';
-
-      course.sections.forEach(function(section, si){
-        var visibleLessons = LESSONS.filter(function(l){ return l.courseKey === course.key && l.sectionLabel === section.label && matchesFilter(l); });
-        if(visibleLessons.length === 0) return;
-
-        var sec = document.createElement('div');
-        sec.className = 'section';
-        sec.innerHTML = '<h3 class="section-title">' + section.label + '</h3>';
-
-        section.modules.forEach(function(mod){
-          var modLessons = mod.lessonIds.map(function(id){ return LESSONS.filter(function(l){return l.id===id;})[0]; }).filter(function(l){ return visibleLessons.indexOf(l) !== -1; });
-          if(modLessons.length === 0) return;
-
-          var doneCount = mod.lessonIds.filter(function(id){ return state[id].ouvido; }).length;
-          var det = document.createElement('details');
-          det.className = 'module' + (doneCount === mod.lessonIds.length ? ' module-done' : '');
-          if(expandedModules[mod.id]) det.open = true;
-          det.addEventListener('toggle', function(){ expandedModules[mod.id] = det.open; });
-
-          var summary = document.createElement('summary');
-          summary.className = 'module-head';
-          summary.innerHTML = chevron() + '<span class="module-title">' + mod.label + '</span><span class="module-count" id="count-' + mod.id + '">' + doneCount + '/' + mod.lessonIds.length + '</span>';
-          det.appendChild(summary);
-
-          var list = document.createElement('div');
-          list.className = 'lesson-list';
-          modLessons.forEach(function(l){ list.appendChild(buildLessonEl(l)); });
-          det.appendChild(list);
-          sec.appendChild(det);
-        });
-        courseEl.appendChild(sec);
-      });
-      container.appendChild(courseEl);
-    });
-
-    if(!anyVisible){ container.innerHTML = '<div class="empty-state">Nenhuma aula corresponde a este filtro.</div>'; }
-    renderProgress();
-  }
-
-  document.getElementById('search').addEventListener('input', function(e){ currentSearch = e.target.value; render(); });
-  document.querySelectorAll('.filter-pill').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      document.querySelectorAll('.filter-pill').forEach(function(b){ b.setAttribute('aria-pressed','false'); });
-      btn.setAttribute('aria-pressed','true');
-      currentFilter = btn.dataset.filter;
+    function toggleOuvido(id){
+      var l = state[id];
+      l.ouvido = !l.ouvido;
+      l.updatedAt = new Date().toISOString();
+      saveLesson(id);
       render();
-    });
-  });
-  document.getElementById('jumpBtn').addEventListener('click', function(){
-    var next = firstUnfinished();
-    if(!next){ alert('Já ouviste tudo — que jornada. 🤍'); return; }
-    document.querySelectorAll('.filter-pill').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.filter==='todas' ? 'true':'false'); });
-    currentFilter = 'todas'; currentSearch = '';
-    document.getElementById('search').value = '';
-    expandedModules[next.moduleId] = true;
-    expandedLessons[next.id] = true;
-    render();
-    setTimeout(function(){
-      var el = document.querySelector('[data-id="' + next.id + '"]');
-      if(el) el.scrollIntoView({ behavior:'smooth', block:'center' });
-    }, 30);
-  });
+    }
+    function updateField(id, field, value){
+      state[id][field] = value;
+      state[id].updatedAt = new Date().toISOString();
+      scheduleSave(id);
+      renderProgress();
+      renderModuleCounts();
+    }
 
-  function renderCourseNav(){
-    var nav = document.getElementById('courseNav');
-    nav.innerHTML = COURSES.map(function(course){
-      return '<a href="#course-' + course.key + '">' + course.name + ' <span>' + fmtDateYear(course.publishDate) + '</span></a>';
-    }).join('');
-    nav.querySelectorAll('a').forEach(function(a){
-      a.addEventListener('click', function(e){
-        e.preventDefault();
-        var target = document.getElementById(a.getAttribute('href').slice(1));
-        if(target) target.scrollIntoView({ behavior:'smooth', block:'start' });
+    function matchesFilter(l){
+      var s = state[l.id];
+      if(currentFilter === 'por-ouvir' && s.ouvido) return false;
+      if(currentFilter === 'ouvidas' && !s.ouvido) return false;
+      if(currentFilter === 'com-video' && !l.video) return false;
+      if(currentFilter === 'com-ficheiro' && !l.file) return false;
+      if(currentSearch){
+        var hay = (l.title + ' ' + l.moduleLabel + ' ' + l.courseName).toLowerCase();
+        if(hay.indexOf(currentSearch.toLowerCase()) === -1) return false;
+      }
+      return true;
+    }
+
+    function icon(){ return '<svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8.5L6.2 11.5L13 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'; }
+    function chevron(){ return '<svg class="chevron" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 3.5L11 8L6 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'; }
+
+    function renderProgress(){
+      var total = LESSONS.length;
+      var done = LESSONS.filter(function(l){ return state[l.id].ouvido; }).length;
+      var pct = total ? Math.round(done/total*100) : 0;
+      document.querySelector('.aura').style.setProperty('--pct', pct);
+      document.getElementById('auraNum').textContent = pct + '%';
+      document.getElementById('progressDetail').textContent = done + ' de ' + total + ' aulas ouvidas';
+    }
+
+    function renderModuleCounts(){
+      COURSES.forEach(function(course){
+        course.sections.forEach(function(section){
+          section.modules.forEach(function(mod){
+            var el = document.getElementById('count-' + mod.id);
+            if(!el) return;
+            var doneCount = mod.lessonIds.filter(function(id){ return state[id].ouvido; }).length;
+            el.textContent = doneCount + '/' + mod.lessonIds.length;
+            el.parentElement.parentElement.classList.toggle('module-done', doneCount === mod.lessonIds.length);
+          });
+        });
+      });
+    }
+
+    function firstUnfinished(){ return LESSONS.filter(function(l){ return !state[l.id].ouvido; })[0]; }
+
+    function buildLessonEl(l){
+      var s = state[l.id];
+      var wrap = document.createElement('div');
+      wrap.className = 'lesson';
+      wrap.dataset.id = l.id;
+      wrap.dataset.done = s.ouvido ? 'true' : 'false';
+      wrap.dataset.expanded = expandedLessons[l.id] ? 'true' : 'false';
+      var hasNote = !!(s.sentimento || s.nextStep);
+
+      wrap.innerHTML =
+        '<div class="lesson-row">' +
+          '<button class="check" aria-checked="' + s.ouvido + '" aria-label="Marcar como ouvida">' + icon() + '</button>' +
+          '<div class="lesson-main">' +
+            '<div class="lesson-title-row">' +
+              (hasNote ? '<span class="note-dot" title="tem nota"></span>' : '') +
+              '<span class="lesson-title">' + l.title + '</span>' +
+            '</div>' +
+            (s.updatedAt ? '<div class="lesson-meta">atualizado ' + fmtDate(s.updatedAt) + '</div>' : '') +
+            (l.file ? '<div class="file-tag" title="' + l.file + '"><span class="file-tag-label">Ficheiro</span><span class="file-tag-name">' + l.file + '</span><span class="file-tag-date">' + fmtDateTime(l.fileDate) + '</span></div>' : '') +
+            (l.video ? '<div class="video-wrap"><video controls preload="none" playsinline src="https://embed-ssl.wistia.com/deliveries/' + l.video + '.bin"></video></div>' : '') +
+          '</div>' +
+        '</div>' +
+        '<div class="notes">' +
+          '<div><label class="field-label">Como te sentiste</label><textarea data-field="sentimento" placeholder="o que mexeu, o que resistiu, o que abriu...">' + (s.sentimento||'') + '</textarea></div>' +
+          '<div><label class="field-label">Próximo passo — como vais aplicar isto</label><textarea data-field="nextStep" placeholder="uma ação concreta, prática ou decisão">' + (s.nextStep||'') + '</textarea></div>' +
+          '<span class="save-hint">guardado automaticamente neste browser</span>' +
+        '</div>';
+
+      wrap.querySelector('.check').addEventListener('click', function(){ toggleOuvido(l.id); });
+      wrap.querySelector('.lesson-title-row').addEventListener('click', function(){
+        expandedLessons[l.id] = !expandedLessons[l.id];
+        wrap.dataset.expanded = expandedLessons[l.id] ? 'true' : 'false';
+      });
+      wrap.querySelectorAll('textarea').forEach(function(ta){
+        ta.addEventListener('input', function(){ updateField(l.id, ta.dataset.field, ta.value); });
+      });
+      return wrap;
+    }
+
+    function render(){
+      var container = document.getElementById('courses');
+      container.innerHTML = '';
+      var anyVisible = false;
+
+      COURSES.forEach(function(course){
+        var courseLessons = LESSONS.filter(function(l){ return l.courseKey === course.key && matchesFilter(l); });
+        if(courseLessons.length === 0) return;
+        anyVisible = true;
+
+        var courseEl = document.createElement('div');
+        courseEl.className = 'course';
+        courseEl.id = 'course-' + course.key;
+        courseEl.innerHTML =
+          (course.cover ? '<img class="course-cover" src="' + course.cover + '" alt="' + course.name + '">' : '') +
+          '<h2 class="course-title">' + course.name + '</h2><p class="course-note">' + course.note + '</p>';
+
+        course.sections.forEach(function(section, si){
+          var visibleLessons = LESSONS.filter(function(l){ return l.courseKey === course.key && l.sectionLabel === section.label && matchesFilter(l); });
+          if(visibleLessons.length === 0) return;
+
+          var sec = document.createElement('div');
+          sec.className = 'section';
+          sec.innerHTML = '<h3 class="section-title">' + section.label + '</h3>';
+
+          section.modules.forEach(function(mod){
+            var modLessons = mod.lessonIds.map(function(id){ return LESSONS.filter(function(l){return l.id===id;})[0]; }).filter(function(l){ return visibleLessons.indexOf(l) !== -1; });
+            if(modLessons.length === 0) return;
+
+            var doneCount = mod.lessonIds.filter(function(id){ return state[id].ouvido; }).length;
+            var det = document.createElement('details');
+            det.className = 'module' + (doneCount === mod.lessonIds.length ? ' module-done' : '');
+            if(expandedModules[mod.id]) det.open = true;
+            det.addEventListener('toggle', function(){ expandedModules[mod.id] = det.open; });
+
+            var summary = document.createElement('summary');
+            summary.className = 'module-head';
+            summary.innerHTML = chevron() + '<span class="module-title">' + mod.label + '</span><span class="module-count" id="count-' + mod.id + '">' + doneCount + '/' + mod.lessonIds.length + '</span>';
+            det.appendChild(summary);
+
+            var list = document.createElement('div');
+            list.className = 'lesson-list';
+            modLessons.forEach(function(l){ list.appendChild(buildLessonEl(l)); });
+            det.appendChild(list);
+            sec.appendChild(det);
+          });
+          courseEl.appendChild(sec);
+        });
+        container.appendChild(courseEl);
+      });
+
+      if(!anyVisible){ container.innerHTML = '<div class="empty-state">Nenhuma aula corresponde a este filtro.</div>'; }
+      renderProgress();
+    }
+
+    document.getElementById('search').addEventListener('input', function(e){ currentSearch = e.target.value; render(); });
+    document.querySelectorAll('.filter-pill').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        document.querySelectorAll('.filter-pill').forEach(function(b){ b.setAttribute('aria-pressed','false'); });
+        btn.setAttribute('aria-pressed','true');
+        currentFilter = btn.dataset.filter;
+        render();
       });
     });
+    document.getElementById('jumpBtn').addEventListener('click', function(){
+      var next = firstUnfinished();
+      if(!next){ alert('Já ouviste tudo — que jornada. 🤍'); return; }
+      document.querySelectorAll('.filter-pill').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.filter==='todas' ? 'true':'false'); });
+      currentFilter = 'todas'; currentSearch = '';
+      document.getElementById('search').value = '';
+      expandedModules[next.moduleId] = true;
+      expandedLessons[next.id] = true;
+      render();
+      setTimeout(function(){
+        var el = document.querySelector('[data-id="' + next.id + '"]');
+        if(el) el.scrollIntoView({ behavior:'smooth', block:'center' });
+      }, 30);
+    });
+
+    function renderCourseNav(){
+      var nav = document.getElementById('courseNav');
+      nav.innerHTML = COURSES.map(function(course){
+        return '<a href="#course-' + course.key + '">' + course.name + ' <span>' + fmtDateYear(course.publishDate) + '</span></a>';
+      }).join('');
+      nav.querySelectorAll('a').forEach(function(a){
+        a.addEventListener('click', function(e){
+          e.preventDefault();
+          var target = document.getElementById(a.getAttribute('href').slice(1));
+          if(target) target.scrollIntoView({ behavior:'smooth', block:'start' });
+        });
+      });
+    }
+
+    initTheme();
+    document.getElementById('themeBtn').addEventListener('click', toggleTheme);
+
+    loadLocal();
+    renderCourseNav();
+    var firstOpenSet = false;
+    for(var i=0;i<LESSONS.length && !firstOpenSet;i++){
+      if(!state[LESSONS[i].id].ouvido){ expandedModules[LESSONS[i].moduleId] = true; firstOpenSet = true; }
+    }
+    render();
   }
 
-  initTheme();
-  document.getElementById('themeBtn').addEventListener('click', toggleTheme);
-
-  loadLocal();
-  renderCourseNav();
-  var firstOpenSet = false;
-  for(var i=0;i<LESSONS.length && !firstOpenSet;i++){
-    if(!state[LESSONS[i].id].ouvido){ expandedModules[LESSONS[i].moduleId] = true; firstOpenSet = true; }
+  function b64ToBuf(b64){
+    var bin = atob(b64);
+    var buf = new Uint8Array(bin.length);
+    for(var i=0;i<bin.length;i++) buf[i] = bin.charCodeAt(i);
+    return buf;
   }
-  render();
+
+  function decryptCourses(password){
+    var enc = new TextEncoder();
+    return crypto.subtle.importKey('raw', enc.encode(password), {name:'PBKDF2'}, false, ['deriveKey']).then(function(keyMaterial){
+      return crypto.subtle.deriveKey(
+        { name:'PBKDF2', salt: b64ToBuf(ENC.salt), iterations: ENC.iterations, hash:'SHA-256' },
+        keyMaterial,
+        { name:'AES-GCM', length:256 },
+        false,
+        ['decrypt']
+      );
+    }).then(function(key){
+      return crypto.subtle.decrypt(
+        { name:'AES-GCM', iv: b64ToBuf(ENC.iv) },
+        key,
+        b64ToBuf(ENC.data)
+      );
+    }).then(function(plainBuf){
+      return new TextDecoder().decode(plainBuf);
+    });
+  }
+
+  document.getElementById('gateForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    var pwd = document.getElementById('gatePassword').value;
+    var btn = document.getElementById('gateSubmit');
+    var errEl = document.getElementById('gateError');
+    errEl.textContent = '';
+    btn.disabled = true; btn.textContent = 'A verificar…';
+    decryptCourses(pwd).then(function(plaintext){
+      COURSES = eval('(' + plaintext + ')');
+      document.getElementById('gate').style.display = 'none';
+      document.getElementById('appWrap').style.display = '';
+      initApp();
+    }).catch(function(err){
+      errEl.textContent = 'Password incorreta.';
+      btn.disabled = false; btn.textContent = 'Entrar';
+      document.getElementById('gatePassword').select();
+    });
+  });
 })();
 </script>
 </body>
